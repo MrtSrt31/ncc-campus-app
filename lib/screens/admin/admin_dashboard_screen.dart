@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/services/firestore_service.dart';
 import 'admin_businesses_screen.dart';
-import 'admin_announcements_screen.dart';
-import 'admin_ring_schedule_screen.dart';
 import 'admin_cafeteria_screen.dart';
 import 'admin_users_screen.dart';
 import 'admin_reviews_screen.dart';
@@ -108,9 +106,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: _StatCard(
-                            icon: Icons.campaign,
-                            label: 'Duyuru',
-                            value: '${_stats['announcements'] ?? 0}',
+                            icon: Icons.restaurant,
+                            label: 'Menü',
+                            value: '${_stats['cafeteria'] ?? 0}',
                             color: AppColors.warning,
                           ),
                         ),
@@ -132,20 +130,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       subtitle: 'Ekle, düzenle, sil',
                       color: AppColors.success,
                       onTap: () => _navigateTo(const AdminBusinessesScreen()),
-                    ),
-                    _AdminTile(
-                      icon: Icons.campaign,
-                      title: 'Duyuru & Etkinlik',
-                      subtitle: 'Kampüs duyuruları yönet',
-                      color: AppColors.warning,
-                      onTap: () => _navigateTo(const AdminAnnouncementsScreen()),
-                    ),
-                    _AdminTile(
-                      icon: Icons.schedule,
-                      title: 'Ring Saatleri',
-                      subtitle: 'Ders saatlerini düzenle',
-                      color: AppColors.accent,
-                      onTap: () => _navigateTo(const AdminRingScheduleScreen()),
                     ),
                     _AdminTile(
                       icon: Icons.restaurant,

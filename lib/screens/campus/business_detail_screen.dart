@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/models/business_model.dart';
 import 'reviews_screen.dart';
 
@@ -11,10 +12,13 @@ class BusinessDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final displayName = (!l.isTr && business.nameEn.isNotEmpty) ? business.nameEn : business.name;
+    final displayDesc = (!l.isTr && business.descriptionEn.isNotEmpty) ? business.descriptionEn : business.description;
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(business.name),
+        title: Text(displayName),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -41,7 +45,7 @@ class BusinessDetailScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          business.name,
+                          displayName,
                           style: const TextStyle(
                             color: AppColors.textPrimary,
                             fontSize: 26,
@@ -58,7 +62,7 @@ class BusinessDetailScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          business.isOpen ? 'Açık' : 'Kapalı',
+                          business.isOpen ? l.open : l.closed,
                           style: TextStyle(
                             color: business.isOpen ? AppColors.success : AppColors.error,
                             fontWeight: FontWeight.w600,
@@ -82,14 +86,14 @@ class BusinessDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '(${business.reviewCount} değerlendirme)',
+                        '(${business.reviewCount} ${l.isTr ? 'değerlendirme' : 'reviews'})',
                         style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    business.description,
+                    displayDesc,
                     style: const TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 15,
@@ -110,7 +114,7 @@ class BusinessDetailScreen extends StatelessWidget {
                   if (business.menu.isNotEmpty) ...[
                     const SizedBox(height: 32),
                     const Text(
-                      'Menü',
+                      'Menü / Menu',
                       style: TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 20,
@@ -138,7 +142,7 @@ class BusinessDetailScreen extends StatelessWidget {
                         );
                       },
                       icon: const Icon(Icons.rate_review),
-                      label: const Text('Yorumları Gör'),
+                      label: Text(l.isTr ? 'Yorumları Gör' : 'See Reviews'),
                     ),
                   ),
                   const SizedBox(height: 40),

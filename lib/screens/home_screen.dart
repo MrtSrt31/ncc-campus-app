@@ -77,27 +77,36 @@ class _HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          auth.isLoggedIn
-                              ? l.greeting(auth.displayName ?? '')
-                              : l.greetingGuest,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w800,
-                          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final screenWidth = constraints.maxWidth;
+            final maxContentWidth = 900.0;
+            final isWide = screenWidth > maxContentWidth;
+
+            return Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxContentWidth),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: isWide ? 32 : 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  auth.isLoggedIn
+                                      ? l.greeting(auth.displayName ?? '')
+                                      : l.greetingGuest,
+                                  style: const TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w800,
+                                  ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -142,130 +151,82 @@ class _HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              Row(
+              _buildResponsiveGrid(
+                screenWidth: screenWidth - (isWide ? 64 : 40),
                 children: [
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Icons.calculate,
-                      title: l.gpaCalculate,
-                      subtitle: l.gpaCalculateSub,
-                      color: AppColors.primary,
-                      onTap: () => Navigator.pushNamed(context, '/gpa'),
-                    ),
+                  _QuickActionCard(
+                    icon: Icons.calculate,
+                    title: l.gpaCalculate,
+                    subtitle: l.gpaCalculateSub,
+                    color: AppColors.primary,
+                    onTap: () => Navigator.pushNamed(context, '/gpa'),
                   ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Icons.science,
-                      title: l.simulator,
-                      subtitle: l.simulatorSub,
-                      color: AppColors.accent,
-                      onTap: () => Navigator.pushNamed(context, '/gpa-simulator'),
-                    ),
+                  _QuickActionCard(
+                    icon: Icons.science,
+                    title: l.simulator,
+                    subtitle: l.simulatorSub,
+                    color: AppColors.accent,
+                    onTap: () => Navigator.pushNamed(context, '/gpa-simulator'),
                   ),
+                  _QuickActionCard(
+                    icon: Icons.store,
+                    title: l.businesses,
+                    subtitle: l.businessesSub,
+                    color: AppColors.success,
+                    onTap: () => Navigator.pushNamed(context, '/campus'),
+                  ),
+                  _QuickActionCard(
+                    icon: Icons.restaurant_menu,
+                    title: l.cafeteria,
+                    subtitle: l.cafeteriaSub,
+                    color: AppColors.warning,
+                    onTap: () => Navigator.pushNamed(context, '/cafeteria'),
+                  ),
+                  _QuickActionCard(
+                    icon: Icons.directions_bus,
+                    title: l.transportation,
+                    subtitle: l.transportationSub,
+                    color: Colors.indigo,
+                    onTap: () => Navigator.pushNamed(context, '/transportation'),
+                  ),
+                  _QuickActionCard(
+                    icon: Icons.event_note,
+                    title: l.thisWeek,
+                    subtitle: l.thisWeekSub,
+                    color: Colors.deepPurple,
+                    onTap: () => Navigator.pushNamed(context, '/this-week'),
+                  ),
+                  _QuickActionCard(
+                    icon: Icons.chat_bubble_outline,
+                    title: l.confessions,
+                    subtitle: l.confessionsSub,
+                    color: Colors.pink,
+                    onTap: () => Navigator.pushNamed(context, '/confessions'),
+                  ),
+                  _QuickActionCard(
+                    icon: Icons.storefront,
+                    title: l.marketplace,
+                    subtitle: l.marketplaceSub,
+                    color: Colors.brown,
+                    onTap: () => Navigator.pushNamed(context, '/marketplace'),
+                  ),
+                  _QuickActionCard(
+                    icon: Icons.directions_car,
+                    title: l.carpool,
+                    subtitle: l.carpoolSub,
+                    color: Colors.cyan,
+                    onTap: () => Navigator.pushNamed(context, '/carpool'),
+                  ),
+                  if (auth.isAdmin)
+                    _QuickActionCard(
+                      icon: Icons.admin_panel_settings,
+                      title: l.adminPanel,
+                      subtitle: l.adminPanelSub,
+                      color: AppColors.error,
+                      onTap: () => Navigator.pushNamed(context, '/admin'),
+                    ),
                 ],
               ),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Icons.store,
-                      title: l.businesses,
-                      subtitle: l.businessesSub,
-                      color: AppColors.success,
-                      onTap: () => Navigator.pushNamed(context, '/campus'),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Icons.restaurant_menu,
-                      title: l.cafeteria,
-                      subtitle: l.cafeteriaSub,
-                      color: AppColors.warning,
-                      onTap: () => Navigator.pushNamed(context, '/cafeteria'),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Icons.directions_bus,
-                      title: l.transportation,
-                      subtitle: l.transportationSub,
-                      color: Colors.indigo,
-                      onTap: () => Navigator.pushNamed(context, '/transportation'),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Icons.event_note,
-                      title: l.thisWeek,
-                      subtitle: l.thisWeekSub,
-                      color: Colors.deepPurple,
-                      onTap: () => Navigator.pushNamed(context, '/this-week'),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Icons.chat_bubble_outline,
-                      title: l.confessions,
-                      subtitle: l.confessionsSub,
-                      color: Colors.pink,
-                      onTap: () => Navigator.pushNamed(context, '/confessions'),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Icons.storefront,
-                      title: l.marketplace,
-                      subtitle: l.marketplaceSub,
-                      color: Colors.brown,
-                      onTap: () => Navigator.pushNamed(context, '/marketplace'),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  Expanded(
-                    child: _QuickActionCard(
-                      icon: Icons.directions_car,
-                      title: l.carpool,
-                      subtitle: l.carpoolSub,
-                      color: Colors.cyan,
-                      onTap: () => Navigator.pushNamed(context, '/carpool'),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  const Expanded(child: SizedBox()),
-                ],
-              ),
-              if (auth.isAdmin) ...[
-                const SizedBox(height: 14),
-                SizedBox(
-                  width: double.infinity,
-                  child: _QuickActionCard(
-                    icon: Icons.admin_panel_settings,
-                    title: l.adminPanel,
-                    subtitle: l.adminPanelSub,
-                    color: AppColors.error,
-                    onTap: () => Navigator.pushNamed(context, '/admin'),
-                  ),
-                ),
-              ],
               const SizedBox(height: 32),
               Text(
                 l.comingSoon,
@@ -292,7 +253,31 @@ class _HomePage extends StatelessWidget {
             ],
           ),
         ),
+              ),
+            );
+          },
+        ),
       ),
+    );
+  }
+
+  Widget _buildResponsiveGrid({
+    required double screenWidth,
+    required List<Widget> children,
+  }) {
+    const spacing = 14.0;
+    // 2 cols for narrow (<500), 3 for medium (<750), 4 for wide
+    final crossAxisCount = screenWidth < 500 ? 2 : (screenWidth < 750 ? 3 : 4);
+    final totalSpacing = spacing * (crossAxisCount - 1);
+    final itemWidth = (screenWidth - totalSpacing) / crossAxisCount;
+
+    return Wrap(
+      spacing: spacing,
+      runSpacing: spacing,
+      children: children.map((child) => SizedBox(
+        width: itemWidth,
+        child: child,
+      )).toList(),
     );
   }
 
@@ -336,18 +321,22 @@ class _HomePage extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              l.soon,
-              style: const TextStyle(
-                color: AppColors.primary,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
+          const SizedBox(width: 8),
+          Flexible(
+            flex: 0,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                l.soon,
+                style: const TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

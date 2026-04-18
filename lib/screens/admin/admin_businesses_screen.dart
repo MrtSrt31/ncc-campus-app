@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/models/business_model.dart';
 import '../../core/services/firestore_service.dart';
 
@@ -15,9 +16,11 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
 
   void _showAddEditDialog({Business? business}) {
     final nameC = TextEditingController(text: business?.name ?? '');
+    final nameEnC = TextEditingController(text: business?.nameEn ?? '');
     final categoryC = TextEditingController(text: business?.category ?? '');
     final phoneC = TextEditingController(text: business?.phone ?? '');
     final descC = TextEditingController(text: business?.description ?? '');
+    final descEnC = TextEditingController(text: business?.descriptionEn ?? '');
     final hoursC = TextEditingController(text: business?.openHours ?? '');
     bool isOpen = business?.isOpen ?? true;
 
@@ -69,10 +72,12 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                _buildField(nameC, 'İşletme Adı'),
+                _buildField(nameC, 'İşletme Adı (TR)'),
+                _buildField(nameEnC, 'Business Name (EN)'),
                 _buildField(categoryC, 'Kategori (Kafe, Restoran, Market, Hizmet)'),
                 _buildField(phoneC, 'Telefon'),
-                _buildField(descC, 'Açıklama', maxLines: 3),
+                _buildField(descC, 'Açıklama (TR)', maxLines: 3),
+                _buildField(descEnC, 'Description (EN)', maxLines: 3),
                 _buildField(hoursC, 'Çalışma Saatleri (ör: 08:00 - 22:00)'),
                 const SizedBox(height: 8),
                 SwitchListTile(
@@ -157,9 +162,11 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
                       final biz = Business(
                         id: business?.id ?? '',
                         name: nameC.text.trim(),
+                        nameEn: nameEnC.text.trim(),
                         category: categoryC.text.trim(),
                         phone: phoneC.text.trim(),
                         description: descC.text.trim(),
+                        descriptionEn: descEnC.text.trim(),
                         openHours: hoursC.text.trim(),
                         isOpen: isOpen,
                         menu: menuItems,
@@ -201,9 +208,10 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('İşletme Yönetimi')),
+      appBar: AppBar(title: Text(l.manageBusinesses)),
       body: StreamBuilder<List<Business>>(
         stream: _firestore.streamBusinesses(),
         builder: (context, snapshot) {
@@ -250,7 +258,11 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
                           Text(biz.name, style: const TextStyle(
                             color: AppColors.textPrimary, fontSize: 15, fontWeight: FontWeight.w600,
                           )),
-                          Text('${biz.category} • ${biz.menu.length} menü öğesi',
+                          if (biz.nameEn.isNotEmpty)
+                            Text(biz.nameEn, style: const TextStyle(
+                              color: AppColors.textSecondary, fontSize: 12, fontStyle: FontStyle.italic,
+                            )),
+                          Text('${biz.category} • ${biz.menu.length} ${l.isTr ? 'menü öğesi' : 'menu items'}',
                             style: const TextStyle(color: AppColors.textHint, fontSize: 12)),
                         ],
                       ),

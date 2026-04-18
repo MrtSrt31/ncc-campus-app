@@ -181,7 +181,7 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
                     children: [
                       Expanded(
                         child: Text(
-                          business.name,
+                          (!l.isTr && business.nameEn.isNotEmpty) ? business.nameEn : business.name,
                           style: const TextStyle(
                             color: AppColors.textPrimary,
                             fontSize: 16,

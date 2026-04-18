@@ -63,7 +63,7 @@ class AuthProvider extends ChangeNotifier {
     if (email.isEmpty || password.isEmpty) return false;
 
     // Demo admin login
-    if (email == 'admin' && password == 'admin') {
+    if (email == 'admin@admin.com' && password == 'admin123') {
       _appUser = AppUser(
         uid: 'demo-admin',
         email: 'admin@ncc.metu.edu.tr',

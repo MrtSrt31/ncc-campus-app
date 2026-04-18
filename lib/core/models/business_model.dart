@@ -3,9 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Business {
   final String id;
   final String name;
+  final String nameEn;
   final String category;
   final String phone;
   final String description;
+  final String descriptionEn;
   final List<String> photos;
   final List<MenuItem> menu;
   final String openHours;
@@ -17,9 +19,11 @@ class Business {
   Business({
     required this.id,
     required this.name,
+    this.nameEn = '',
     required this.category,
     this.phone = '',
     this.description = '',
+    this.descriptionEn = '',
     this.photos = const [],
     this.menu = const [],
     this.openHours = '',
@@ -31,9 +35,11 @@ class Business {
 
   Map<String, dynamic> toFirestore() => {
         'name': name,
+        'nameEn': nameEn,
         'category': category,
         'phone': phone,
         'description': description,
+        'descriptionEn': descriptionEn,
         'photos': photos,
         'menu': menu.map((m) => m.toFirestore()).toList(),
         'openHours': openHours,
@@ -48,9 +54,11 @@ class Business {
     return Business(
       id: doc.id,
       name: data['name'] ?? '',
+      nameEn: data['nameEn'] ?? '',
       category: data['category'] ?? '',
       phone: data['phone'] ?? '',
       description: data['description'] ?? '',
+      descriptionEn: data['descriptionEn'] ?? '',
       photos: List<String>.from(data['photos'] ?? []),
       menu: (data['menu'] as List<dynamic>?)
               ?.map((m) => MenuItem.fromFirestore(m))
@@ -67,9 +75,11 @@ class Business {
   Business copyWith({
     String? id,
     String? name,
+    String? nameEn,
     String? category,
     String? phone,
     String? description,
+    String? descriptionEn,
     List<String>? photos,
     List<MenuItem>? menu,
     String? openHours,
@@ -80,9 +90,11 @@ class Business {
     return Business(
       id: id ?? this.id,
       name: name ?? this.name,
+      nameEn: nameEn ?? this.nameEn,
       category: category ?? this.category,
       phone: phone ?? this.phone,
       description: description ?? this.description,
+      descriptionEn: descriptionEn ?? this.descriptionEn,
       photos: photos ?? this.photos,
       menu: menu ?? this.menu,
       openHours: openHours ?? this.openHours,
