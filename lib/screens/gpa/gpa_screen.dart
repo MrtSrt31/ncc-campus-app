@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/providers/gpa_provider.dart';
+import '../../core/l10n/app_localizations.dart';
+import '../../core/data/department_data.dart';
 import '../../widgets/ad_banner_widget.dart';
 
 class GpaScreen extends StatefulWidget {
@@ -13,9 +15,13 @@ class GpaScreen extends StatefulWidget {
 
 class _GpaScreenState extends State<GpaScreen> {
   void _showAddCourseDialog() {
+    final l = AppLocalizations.of(context);
     final nameController = TextEditingController();
     final creditsController = TextEditingController();
     String selectedGrade = 'AA';
+    Department? selectedDept;
+    DepartmentCourse? selectedCourse;
+    bool manualMode = false;
 
     showModalBottomSheet(
       context: context,
@@ -29,89 +35,168 @@ class _GpaScreenState extends State<GpaScreen> {
           24, 24, 24, MediaQuery.of(ctx).viewInsets.bottom + 24,
         ),
         child: StatefulBuilder(
-          builder: (context, setModalState) => Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceLight,
-                    borderRadius: BorderRadius.circular(2),
+          builder: (context, setModalState) => SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceLight,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Ders Ekle',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                controller: nameController,
-                style: const TextStyle(color: AppColors.textPrimary),
-                decoration: const InputDecoration(hintText: 'Ders Adı'),
-              ),
-              const SizedBox(height: 14),
-              TextField(
-                controller: creditsController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                style: const TextStyle(color: AppColors.textPrimary),
-                decoration: const InputDecoration(hintText: 'Kredi (ör: 3)'),
-              ),
-              const SizedBox(height: 14),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.surfaceLight),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: selectedGrade,
-                    isExpanded: true,
-                    dropdownColor: AppColors.surface,
-                    style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
-                    items: GpaProvider.gradePoints.keys
-                        .map((g) => DropdownMenuItem(value: g, child: Text(g)))
-                        .toList(),
-                    onChanged: (v) => setModalState(() => selectedGrade = v!),
+                const SizedBox(height: 20),
+                Text(
+                  l.addCourse,
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: () {
-                    final name = nameController.text.trim();
-                    final credits = double.tryParse(creditsController.text.trim());
-                    if (name.isEmpty || credits == null || credits <= 0) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Tüm alanları doğru doldurun'),
-                          backgroundColor: AppColors.error,
+                const SizedBox(height: 20),
+                // Department selector
+                if (!manualMode) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: AppColors.surfaceLight),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<Department>(
+                        value: selectedDept,
+                        isExpanded: true,
+                        hint: Text(l.selectDepartment, style: const TextStyle(color: AppColors.textHint)),
+                        dropdownColor: AppColors.surface,
+                        style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+                        items: DepartmentData.departments.map((d) =>
+                          DropdownMenuItem(
+                            value: d,
+                            child: Text(l.isTr ? d.name : d.nameEn, overflow: TextOverflow.ellipsis),
+                          )).toList(),
+                        onChanged: (v) => setModalState(() {
+                          selectedDept = v;
+                          selectedCourse = null;
+                        }),
+                      ),
+                    ),
+                  ),
+                  if (selectedDept != null) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: AppColors.surfaceLight),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<DepartmentCourse>(
+                          value: selectedCourse,
+                          isExpanded: true,
+                          hint: Text(l.selectCourse, style: const TextStyle(color: AppColors.textHint)),
+                          dropdownColor: AppColors.surface,
+                          style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+                          items: selectedDept!.courses.map((c) =>
+                            DropdownMenuItem(
+                              value: c,
+                              child: Text('${c.code} - ${c.name} (${c.credits.toStringAsFixed(0)} kr)',
+                                overflow: TextOverflow.ellipsis),
+                            )).toList(),
+                          onChanged: (v) => setModalState(() {
+                            selectedCourse = v;
+                            if (v != null) {
+                              nameController.text = '${v.code} ${v.name}';
+                              creditsController.text = v.credits.toStringAsFixed(0);
+                            }
+                          }),
                         ),
-                      );
-                      return;
-                    }
-                    context.read<GpaProvider>().addCourse(
-                          Course(name: name, credits: credits, grade: selectedGrade),
-                        );
-                    Navigator.pop(ctx);
-                  },
-                  child: const Text('Ekle'),
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 12),
+                  Center(
+                    child: TextButton(
+                      onPressed: () => setModalState(() => manualMode = true),
+                      child: Text(l.orManual, style: const TextStyle(color: AppColors.accent)),
+                    ),
+                  ),
+                ] else ...[
+                  Center(
+                    child: TextButton(
+                      onPressed: () => setModalState(() => manualMode = false),
+                      child: Text(l.selectDepartment, style: const TextStyle(color: AppColors.accent)),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 8),
+                TextField(
+                  controller: nameController,
+                  style: const TextStyle(color: AppColors.textPrimary),
+                  decoration: InputDecoration(hintText: l.courseName),
                 ),
-              ),
-            ],
+                const SizedBox(height: 14),
+                TextField(
+                  controller: creditsController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  style: const TextStyle(color: AppColors.textPrimary),
+                  decoration: InputDecoration(hintText: l.creditHint),
+                ),
+                const SizedBox(height: 14),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.surfaceLight),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: selectedGrade,
+                      isExpanded: true,
+                      dropdownColor: AppColors.surface,
+                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                      items: GpaProvider.gradePoints.keys
+                          .map((g) => DropdownMenuItem(value: g, child: Text(g)))
+                          .toList(),
+                      onChanged: (v) => setModalState(() => selectedGrade = v!),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final name = nameController.text.trim();
+                      final credits = double.tryParse(creditsController.text.trim());
+                      if (name.isEmpty || credits == null || credits <= 0) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(l.fillAllFields),
+                            backgroundColor: AppColors.error,
+                          ),
+                        );
+                        return;
+                      }
+                      context.read<GpaProvider>().addCourse(
+                            Course(name: name, credits: credits, grade: selectedGrade),
+                          );
+                      Navigator.pop(ctx);
+                    },
+                    child: Text(l.add),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -128,23 +213,24 @@ class _GpaScreenState extends State<GpaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('GPA Hesapla'),
+        title: Text(l.gpaTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.science_outlined),
-            tooltip: 'Simülatör',
+            tooltip: l.simulator,
             onPressed: () => Navigator.pushNamed(context, '/gpa-simulator'),
           ),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             color: AppColors.surface,
             itemBuilder: (_) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'clear',
-                child: Text('Tümünü Sil', style: TextStyle(color: AppColors.error)),
+                child: Text(l.deleteAll, style: const TextStyle(color: AppColors.error)),
               ),
             ],
             onSelected: (v) {
@@ -159,11 +245,11 @@ class _GpaScreenState extends State<GpaScreen> {
         builder: (context, gpa, _) => Column(
           children: [
             const AdBannerWidget(),
-            _buildGpaSummary(gpa),
+            _buildGpaSummary(gpa, l),
             Expanded(
               child: gpa.courses.isEmpty
-                  ? _buildEmptyState()
-                  : _buildCourseList(gpa),
+                  ? _buildEmptyState(l)
+                  : _buildCourseList(gpa, l),
             ),
           ],
         ),
@@ -172,12 +258,12 @@ class _GpaScreenState extends State<GpaScreen> {
         onPressed: _showAddCourseDialog,
         backgroundColor: AppColors.primary,
         icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text('Ders Ekle', style: TextStyle(color: Colors.white)),
+        label: Text(l.addCourse, style: const TextStyle(color: Colors.white)),
       ),
     );
   }
 
-  Widget _buildGpaSummary(GpaProvider gpa) {
+  Widget _buildGpaSummary(GpaProvider gpa, AppLocalizations l) {
     return Container(
       margin: const EdgeInsets.all(20),
       padding: const EdgeInsets.all(24),
@@ -199,9 +285,9 @@ class _GpaScreenState extends State<GpaScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Genel Ortalama',
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                Text(
+                  l.overallGpa,
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -219,12 +305,12 @@ class _GpaScreenState extends State<GpaScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '${gpa.courses.length} Ders',
+                '${gpa.courses.length} ${l.courses}',
                 style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
               ),
               const SizedBox(height: 4),
               Text(
-                '${gpa.totalCredits.toStringAsFixed(0)} Kredi',
+                '${gpa.totalCredits.toStringAsFixed(0)} ${l.credit}',
                 style: const TextStyle(
                   color: AppColors.accent,
                   fontSize: 18,
@@ -238,28 +324,28 @@ class _GpaScreenState extends State<GpaScreen> {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(AppLocalizations l) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.school_outlined, size: 64, color: AppColors.textHint.withValues(alpha: 0.5)),
           const SizedBox(height: 16),
-          const Text(
-            'Henüz ders eklenmedi',
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
+          Text(
+            l.noCourses,
+            style: const TextStyle(color: AppColors.textSecondary, fontSize: 16),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Derslerini ekleyerek GPA\'nı hesapla',
-            style: TextStyle(color: AppColors.textHint, fontSize: 14),
+          Text(
+            l.addCoursesHint,
+            style: const TextStyle(color: AppColors.textHint, fontSize: 14),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCourseList(GpaProvider gpa) {
+  Widget _buildCourseList(GpaProvider gpa, AppLocalizations l) {
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
       itemCount: gpa.courses.length,
@@ -321,7 +407,7 @@ class _GpaScreenState extends State<GpaScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${course.credits.toStringAsFixed(0)} Kredi',
+                        '${course.credits.toStringAsFixed(0)} ${l.credit}',
                         style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
                       ),
                     ],

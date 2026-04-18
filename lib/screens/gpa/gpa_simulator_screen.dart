@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/providers/gpa_provider.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../widgets/ad_banner_widget.dart';
 
 class GpaSimulatorScreen extends StatefulWidget {
@@ -30,10 +31,11 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
   @override
   Widget build(BuildContext context) {
     final gpa = context.watch<GpaProvider>();
+    final l = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('GPA Simülatör')),
+      appBar: AppBar(title: Text(l.gpaSimulator)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -43,9 +45,9 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
             const SizedBox(height: 8),
             _buildCurrentGpaCard(gpa),
             const SizedBox(height: 28),
-            const Text(
-              '"Bu dersten ... alırsam?"',
-              style: TextStyle(
+            Text(
+              l.ifIGetGrade,
+              style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
@@ -55,14 +57,14 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
             TextField(
               controller: _courseNameController,
               style: const TextStyle(color: AppColors.textPrimary),
-              decoration: const InputDecoration(hintText: 'Ders Adı'),
+              decoration: InputDecoration(hintText: l.courseName),
             ),
             const SizedBox(height: 14),
             TextField(
               controller: _creditsController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               style: const TextStyle(color: AppColors.textPrimary),
-              decoration: const InputDecoration(hintText: 'Kredi'),
+              decoration: InputDecoration(hintText: l.credit),
             ),
             const SizedBox(height: 14),
             Container(
@@ -100,21 +102,21 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
                     );
                   });
                 },
-                child: const Text('Hesapla'),
+                child: Text(l.calculate),
               ),
             ),
             if (_simulatedGpa != null) ...[
               const SizedBox(height: 20),
               _buildResultCard(
-                'Tahmini GPA',
+                l.estimatedGpa,
                 _simulatedGpa!.toStringAsFixed(2),
                 AppColors.accent,
               ),
             ],
             const SizedBox(height: 40),
-            const Text(
-              '"Hedef GPA için minimum not?"',
-              style: TextStyle(
+            Text(
+              l.targetGpaQuestion,
+              style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
@@ -125,7 +127,7 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
               controller: _targetGpaController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               style: const TextStyle(color: AppColors.textPrimary),
-              decoration: const InputDecoration(hintText: 'Hedef GPA (ör: 3.00)'),
+              decoration: InputDecoration(hintText: l.targetGpaHint),
             ),
             const SizedBox(height: 20),
             SizedBox(
@@ -141,14 +143,14 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
                   });
                 },
                 icon: const Icon(Icons.gps_fixed, color: Colors.white),
-                label: const Text('Hesapla'),
+                label: Text(l.calculate),
                 style: ElevatedButton.styleFrom(backgroundColor: AppColors.accent),
               ),
             ),
             if (_minimumGrade != null) ...[
               const SizedBox(height: 20),
               _buildResultCard(
-                'Minimum Alman Gereken Not',
+                l.minimumGrade,
                 _minimumGrade!,
                 _minimumGrade == 'Impossible' ? AppColors.error : AppColors.success,
               ),
@@ -161,6 +163,7 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
   }
 
   Widget _buildCurrentGpaCard(GpaProvider gpa) {
+    final l = AppLocalizations.of(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -175,9 +178,9 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Mevcut GPA',
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+              Text(
+                l.currentGpa,
+                style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
               ),
               Text(
                 gpa.currentGpa.toStringAsFixed(2),
@@ -191,7 +194,7 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
           ),
           const Spacer(),
           Text(
-            '${gpa.courses.length} ders • ${gpa.totalCredits.toStringAsFixed(0)} kredi',
+            l.coursesCredits(gpa.courses.length, gpa.totalCredits.toStringAsFixed(0)),
             style: const TextStyle(color: AppColors.textHint, fontSize: 13),
           ),
         ],

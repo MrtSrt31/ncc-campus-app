@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/models/campus_models.dart';
 import '../../core/services/firestore_service.dart';
 
@@ -10,10 +11,11 @@ class CafeteriaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firestore = FirestoreService();
+    final l = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Yemekhane Menüsü')),
+      appBar: AppBar(title: Text(l.cafeteriaMenu)),
       body: StreamBuilder<List<CafeteriaMenu>>(
         stream: firestore.streamCafeteriaMenu(),
         builder: (context, snapshot) {
@@ -28,8 +30,8 @@ class CafeteriaScreen extends StatelessWidget {
                 children: [
                   Icon(Icons.restaurant, size: 64, color: AppColors.textHint.withValues(alpha: 0.5)),
                   const SizedBox(height: 16),
-                  const Text('Menü henüz eklenmedi',
-                    style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+                  Text(l.noMenuYet,
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 16)),
                 ],
               ),
             );
@@ -56,7 +58,7 @@ class CafeteriaScreen extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          DateFormat('dd MMMM yyyy', 'tr').format(item.date),
+                          DateFormat('dd MMMM yyyy', l.isTr ? 'tr' : 'en').format(item.date),
                           style: const TextStyle(
                             color: AppColors.textPrimary, fontSize: 17, fontWeight: FontWeight.w700,
                           ),
@@ -69,9 +71,9 @@ class CafeteriaScreen extends StatelessWidget {
                               color: AppColors.primary.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: const Text(
-                              'Bugün',
-                              style: TextStyle(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w600),
+                            child: Text(
+                              l.today,
+                              style: const TextStyle(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w600),
                             ),
                           ),
                         ],
@@ -79,13 +81,13 @@ class CafeteriaScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     if (item.soup.isNotEmpty)
-                      _buildRow('🥣', 'Çorba', item.soup),
+                      _buildRow('🥣', l.soup, item.soup),
                     if (item.mainCourse.isNotEmpty)
-                      _buildRow('🍖', 'Ana Yemek', item.mainCourse),
+                      _buildRow('🍖', l.mainCourseName, item.mainCourse),
                     if (item.sideDish.isNotEmpty)
-                      _buildRow('🥗', 'Yan Yemek', item.sideDish),
+                      _buildRow('🥗', l.sideDish, item.sideDish),
                     if (item.extra.isNotEmpty)
-                      _buildRow('🍰', 'Ekstra', item.extra),
+                      _buildRow('🍰', l.extra, item.extra),
                   ],
                 ),
               );

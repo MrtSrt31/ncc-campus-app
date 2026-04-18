@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/theme/app_theme.dart';
 import '../core/providers/auth_provider.dart';
+import '../core/l10n/app_localizations.dart';
+import '../core/providers/locale_provider.dart';
 import '../widgets/ad_banner_widget.dart';
 import 'gpa/gpa_screen.dart';
 import 'campus/campus_directory_screen.dart';
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
@@ -35,26 +38,26 @@ class _HomeScreenState extends State<HomeScreen> {
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (i) => setState(() => _currentIndex = i),
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'Ana Sayfa',
+              icon: const Icon(Icons.home_outlined),
+              activeIcon: const Icon(Icons.home),
+              label: l.navHome,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.calculate_outlined),
-              activeIcon: Icon(Icons.calculate),
-              label: 'GPA',
+              icon: const Icon(Icons.calculate_outlined),
+              activeIcon: const Icon(Icons.calculate),
+              label: l.navGpa,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.store_outlined),
-              activeIcon: Icon(Icons.store),
-              label: 'Kampüs',
+              icon: const Icon(Icons.store_outlined),
+              activeIcon: const Icon(Icons.store),
+              label: l.navCampus,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
-              label: 'Profil',
+              icon: const Icon(Icons.person_outline),
+              activeIcon: const Icon(Icons.person),
+              label: l.navProfile,
             ),
           ],
         ),
@@ -69,6 +72,7 @@ class _HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    final l = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -86,7 +90,9 @@ class _HomePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Merhaba${auth.isLoggedIn ? ", ${auth.displayName}" : ""} 👋',
+                          auth.isLoggedIn
+                              ? l.greeting(auth.displayName ?? '')
+                              : l.greetingGuest,
                           style: const TextStyle(
                             color: AppColors.textPrimary,
                             fontSize: 26,
@@ -94,27 +100,30 @@ class _HomePage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        const Text(
-                          'NCC Campus\'a hoş geldin',
-                          style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                        Text(
+                          l.welcomeSubtitle,
+                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'NCC',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w900,
+                  GestureDetector(
+                    onTap: () => context.read<LocaleProvider>().toggleLocale(),
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Center(
+                        child: Text(
+                          l.isTr ? 'TR' : 'EN',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ),
                     ),
@@ -124,9 +133,9 @@ class _HomePage extends StatelessWidget {
               const SizedBox(height: 12),
               const AdBannerWidget(),
               const SizedBox(height: 20),
-              const Text(
-                'Hızlı Erişim',
-                style: TextStyle(
+              Text(
+                l.quickAccess,
+                style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -138,8 +147,8 @@ class _HomePage extends StatelessWidget {
                   Expanded(
                     child: _QuickActionCard(
                       icon: Icons.calculate,
-                      title: 'GPA Hesapla',
-                      subtitle: 'Ortalamanı hesapla',
+                      title: l.gpaCalculate,
+                      subtitle: l.gpaCalculateSub,
                       color: AppColors.primary,
                       onTap: () => Navigator.pushNamed(context, '/gpa'),
                     ),
@@ -148,8 +157,8 @@ class _HomePage extends StatelessWidget {
                   Expanded(
                     child: _QuickActionCard(
                       icon: Icons.science,
-                      title: 'Simülatör',
-                      subtitle: 'Not simülasyonu',
+                      title: l.simulator,
+                      subtitle: l.simulatorSub,
                       color: AppColors.accent,
                       onTap: () => Navigator.pushNamed(context, '/gpa-simulator'),
                     ),
@@ -162,8 +171,8 @@ class _HomePage extends StatelessWidget {
                   Expanded(
                     child: _QuickActionCard(
                       icon: Icons.store,
-                      title: 'İşletmeler',
-                      subtitle: 'Kampüs rehberi',
+                      title: l.businesses,
+                      subtitle: l.businessesSub,
                       color: AppColors.success,
                       onTap: () => Navigator.pushNamed(context, '/campus'),
                     ),
@@ -172,8 +181,8 @@ class _HomePage extends StatelessWidget {
                   Expanded(
                     child: _QuickActionCard(
                       icon: Icons.restaurant_menu,
-                      title: 'Yemekhane',
-                      subtitle: 'Günlük menü',
+                      title: l.cafeteria,
+                      subtitle: l.cafeteriaSub,
                       color: AppColors.warning,
                       onTap: () => Navigator.pushNamed(context, '/cafeteria'),
                     ),
@@ -185,23 +194,63 @@ class _HomePage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _QuickActionCard(
-                      icon: Icons.campaign,
-                      title: 'Duyurular',
-                      subtitle: 'Kampüs haberleri',
-                      color: Colors.orange,
-                      onTap: () => Navigator.pushNamed(context, '/announcements'),
+                      icon: Icons.directions_bus,
+                      title: l.transportation,
+                      subtitle: l.transportationSub,
+                      color: Colors.indigo,
+                      onTap: () => Navigator.pushNamed(context, '/transportation'),
                     ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
                     child: _QuickActionCard(
-                      icon: Icons.schedule,
-                      title: 'Ring Saatleri',
-                      subtitle: 'Ders saatleri',
-                      color: Colors.teal,
-                      onTap: () => Navigator.pushNamed(context, '/ring-schedule'),
+                      icon: Icons.event_note,
+                      title: l.thisWeek,
+                      subtitle: l.thisWeekSub,
+                      color: Colors.deepPurple,
+                      onTap: () => Navigator.pushNamed(context, '/this-week'),
                     ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  Expanded(
+                    child: _QuickActionCard(
+                      icon: Icons.chat_bubble_outline,
+                      title: l.confessions,
+                      subtitle: l.confessionsSub,
+                      color: Colors.pink,
+                      onTap: () => Navigator.pushNamed(context, '/confessions'),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: _QuickActionCard(
+                      icon: Icons.storefront,
+                      title: l.marketplace,
+                      subtitle: l.marketplaceSub,
+                      color: Colors.brown,
+                      onTap: () => Navigator.pushNamed(context, '/marketplace'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  Expanded(
+                    child: _QuickActionCard(
+                      icon: Icons.directions_car,
+                      title: l.carpool,
+                      subtitle: l.carpoolSub,
+                      color: Colors.cyan,
+                      onTap: () => Navigator.pushNamed(context, '/carpool'),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  const Expanded(child: SizedBox()),
                 ],
               ),
               if (auth.isAdmin) ...[
@@ -210,17 +259,17 @@ class _HomePage extends StatelessWidget {
                   width: double.infinity,
                   child: _QuickActionCard(
                     icon: Icons.admin_panel_settings,
-                    title: 'Admin Panel',
-                    subtitle: 'Yönetim paneli',
+                    title: l.adminPanel,
+                    subtitle: l.adminPanelSub,
                     color: AppColors.error,
                     onTap: () => Navigator.pushNamed(context, '/admin'),
                   ),
                 ),
               ],
               const SizedBox(height: 32),
-              const Text(
-                'Yakında Geliyor',
-                style: TextStyle(
+              Text(
+                l.comingSoon,
+                style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -229,13 +278,15 @@ class _HomePage extends StatelessWidget {
               const SizedBox(height: 16),
               _buildComingSoonCard(
                 Icons.smart_toy,
-                'AI Ders Yardımcısı',
-                'Akıllı ders önerileri',
+                l.aiAssistant,
+                l.aiAssistantSub,
+                l,
               ),
               _buildComingSoonCard(
                 Icons.map,
-                'Kampüs Haritası',
-                'İnteraktif kampüs rehberi',
+                l.campusMap,
+                l.campusMapSub,
+                l,
               ),
               const SizedBox(height: 20),
             ],
@@ -245,7 +296,7 @@ class _HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildComingSoonCard(IconData icon, String title, String subtitle) {
+  Widget _buildComingSoonCard(IconData icon, String title, String subtitle, AppLocalizations l) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(18),
@@ -291,9 +342,9 @@ class _HomePage extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Text(
-              'Yakında',
-              style: TextStyle(
+            child: Text(
+              l.soon,
+              style: const TextStyle(
                 color: AppColors.primary,
                 fontSize: 11,
                 fontWeight: FontWeight.w600,

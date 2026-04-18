@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -16,27 +17,35 @@ class _AdBannerWidgetState extends State<AdBannerWidget> {
   BannerAd? _bannerAd;
   bool _isLoaded = false;
 
+  bool get _isAdSupported => Platform.isAndroid || Platform.isIOS;
+
   @override
   void initState() {
     super.initState();
-    _loadAd();
+    if (_isAdSupported) _loadAd();
   }
 
   void _loadAd() {
-    _bannerAd = AdService.instance.createBannerAd(
-      onLoaded: () {
-        if (mounted) setState(() => _isLoaded = true);
-      },
-      onFailed: () {
-        if (mounted) setState(() => _isLoaded = false);
-      },
-    );
-    _bannerAd?.load();
+    try {
+      _bannerAd = AdService.instance.createBannerAd(
+        onLoaded: () {
+          if (mounted) setState(() => _isLoaded = true);
+        },
+        onFailed: () {
+          if (mounted) setState(() => _isLoaded = false);
+        },
+      );
+      _bannerAd?.load();
+    } catch (e) {
+      debugPrint('AdBannerWidget: Failed to load ad: $e');
+    }
   }
 
   @override
   void dispose() {
-    _bannerAd?.dispose();
+    try {
+      _bannerAd?.dispose();
+    } catch (_) {}
     super.dispose();
   }
 

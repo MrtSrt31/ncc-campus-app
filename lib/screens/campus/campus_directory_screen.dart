@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/data/sample_data.dart';
 import '../../core/models/business_model.dart';
 import '../../core/services/firestore_service.dart';
@@ -37,10 +38,11 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Kampüs Rehberi'),
+        title: Text(l.campusDirectory),
         actions: [
           IconButton(
             icon: Icon(
@@ -48,7 +50,7 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
               color: _showOnlyOpen ? AppColors.success : AppColors.textHint,
               size: 32,
             ),
-            tooltip: 'Sadece açık olanlar',
+            tooltip: l.onlyOpenOnes,
             onPressed: () => setState(() => _showOnlyOpen = !_showOnlyOpen),
           ),
         ],
@@ -62,7 +64,7 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
               onChanged: (v) => setState(() => _searchQuery = v),
               style: const TextStyle(color: AppColors.textPrimary),
               decoration: InputDecoration(
-                hintText: 'İşletme ara...',
+                hintText: l.searchBusiness,
                 prefixIcon: const Icon(Icons.search, color: AppColors.textHint),
                 filled: true,
                 fillColor: AppColors.surface,
@@ -87,7 +89,7 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
                   padding: const EdgeInsets.only(right: 8),
                   child: FilterChip(
                     selected: isSelected,
-                    label: Text(cat),
+                    label: Text(_localizedCategory(cat, l)),
                     labelStyle: TextStyle(
                       color: isSelected ? Colors.white : AppColors.textSecondary,
                       fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
@@ -115,10 +117,10 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
                     : SampleData.businesses;
                 final filtered = _filterList(businesses);
                 if (filtered.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Text(
-                      'İşletme bulunamadı',
-                      style: TextStyle(color: AppColors.textSecondary),
+                      l.noBusinessFound,
+                      style: const TextStyle(color: AppColors.textSecondary),
                     ),
                   );
                 }
@@ -138,6 +140,7 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
   }
 
   Widget _buildBusinessCard(Business business) {
+    final l = AppLocalizations.of(context);
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -195,7 +198,7 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          business.isOpen ? 'Açık' : 'Kapalı',
+                          business.isOpen ? l.open : l.closed,
                           style: TextStyle(
                             color: business.isOpen ? AppColors.success : AppColors.error,
                             fontSize: 11,
@@ -209,7 +212,7 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
                   Row(
                     children: [
                       Text(
-                        business.category,
+                        _localizedCategory(business.category, l),
                         style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
                       ),
                       const SizedBox(width: 12),
@@ -229,6 +232,17 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
         ),
       ),
     );
+  }
+
+  String _localizedCategory(String cat, AppLocalizations l) {
+    switch (cat) {
+      case 'Tümü': return l.all;
+      case 'Kafe': return l.cafe;
+      case 'Restoran': return l.restaurant;
+      case 'Market': return l.market;
+      case 'Hizmet': return l.service;
+      default: return cat;
+    }
   }
 
   IconData _categoryIcon(String category) {

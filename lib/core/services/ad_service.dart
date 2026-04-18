@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:io';
 
@@ -27,9 +28,15 @@ class AdService {
 
   Future<void> initialize() async {
     if (_isInitialized) return;
+    if (!Platform.isAndroid && !Platform.isIOS) {
+      debugPrint('AdService: Ads not supported on this platform');
+      return;
+    }
     await MobileAds.instance.initialize();
     _isInitialized = true;
   }
+
+  bool get isSupported => Platform.isAndroid || Platform.isIOS;
 
   BannerAd createBannerAd({Function? onLoaded, Function? onFailed}) {
     return BannerAd(
@@ -39,7 +46,7 @@ class AdService {
       listener: BannerAdListener(
         onAdLoaded: (ad) => onLoaded?.call(),
         onAdFailedToLoad: (ad, error) {
-          ad.dispose();
+          try { ad.dispose(); } catch (_) {}
           onFailed?.call();
         },
       ),
@@ -47,6 +54,7 @@ class AdService {
   }
 
   Future<void> loadInterstitialAd() async {
+    if (!isSupported) return;
     await InterstitialAd.load(
       adUnitId: _interstitialAdUnitId,
       request: const AdRequest(),
@@ -58,6 +66,7 @@ class AdService {
   }
 
   Future<void> showInterstitialAd() async {
+    if (!isSupported) return;
     if (_interstitialAd != null) {
       await _interstitialAd!.show();
       _interstitialAd = null;
@@ -66,7 +75,9 @@ class AdService {
   }
 
   void dispose() {
-    _bannerAd?.dispose();
-    _interstitialAd?.dispose();
+    try {
+      _bannerAd?.dispose();
+      _interstitialAd?.dispose();
+    } catch (_) {}
   }
 }

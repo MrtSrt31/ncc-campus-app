@@ -4,6 +4,8 @@ import '../../core/theme/app_theme.dart';
 import '../../core/providers/auth_provider.dart';
 import '../../core/providers/ad_provider.dart';
 import '../../core/providers/gpa_provider.dart';
+import '../../core/providers/locale_provider.dart';
+import '../../core/l10n/app_localizations.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -13,10 +15,11 @@ class ProfileScreen extends StatelessWidget {
     final auth = context.watch<AuthProvider>();
     final adProvider = context.watch<AdProvider>();
     final gpa = context.watch<GpaProvider>();
+    final l = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Profil')),
+      appBar: AppBar(title: Text(l.profile)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -43,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              auth.isLoggedIn ? (auth.displayName ?? 'Kullanıcı') : 'Misafir',
+              auth.isLoggedIn ? (auth.displayName ?? 'User') : l.guest,
               style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 22,
@@ -60,29 +63,29 @@ class ProfileScreen extends StatelessWidget {
             if (!auth.isLoggedIn) ...[
               const SizedBox(height: 8),
               Text(
-                'Tüm özelliklere erişmek için üye ol',
-                style: TextStyle(color: AppColors.textHint, fontSize: 13),
+                l.loginRequired,
+                style: const TextStyle(color: AppColors.textHint, fontSize: 13),
               ),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () => Navigator.pushNamed(context, '/register'),
-                  child: const Text('Üye Ol'),
+                  child: Text(l.register),
                 ),
               ),
             ],
             const SizedBox(height: 32),
-            _buildStatCard(gpa),
+            _buildStatCard(gpa, l),
             const SizedBox(height: 20),
-            _buildSettingsSection(context, auth, adProvider),
+            _buildSettingsSection(context, auth, adProvider, l),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatCard(GpaProvider gpa) {
+  Widget _buildStatCard(GpaProvider gpa, AppLocalizations l) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -95,9 +98,9 @@ class ProfileScreen extends StatelessWidget {
         children: [
           _buildStat('GPA', gpa.currentGpa.toStringAsFixed(2)),
           Container(width: 1, height: 40, color: AppColors.divider),
-          _buildStat('Ders', '${gpa.courses.length}'),
+          _buildStat(l.courses, '${gpa.courses.length}'),
           Container(width: 1, height: 40, color: AppColors.divider),
-          _buildStat('Kredi', gpa.totalCredits.toStringAsFixed(0)),
+          _buildStat(l.credit, gpa.totalCredits.toStringAsFixed(0)),
         ],
       ),
     );
@@ -123,24 +126,35 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsSection(BuildContext context, AuthProvider auth, AdProvider adProvider) {
+  Widget _buildSettingsSection(BuildContext context, AuthProvider auth, AdProvider adProvider, AppLocalizations l) {
+    final localeProvider = context.watch<LocaleProvider>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Ayarlar',
-          style: TextStyle(
+        Text(
+          l.settings,
+          style: const TextStyle(
             color: AppColors.textPrimary,
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: 14),
+        _buildSettingsTile(
+          icon: Icons.language,
+          title: l.language,
+          subtitle: localeProvider.isTr ? l.turkish : l.english,
+          trailing: Switch(
+            value: localeProvider.isTr,
+            activeTrackColor: AppColors.primary,
+            onChanged: (_) => localeProvider.toggleLocale(),
+          ),
+        ),
         if (auth.isLoggedIn)
           _buildSettingsTile(
             icon: Icons.campaign,
-            title: 'Reklam Tercihi',
-            subtitle: adProvider.adsEnabled ? 'Reklamlı (Aktif)' : 'Reklamsız',
+            title: l.showAds,
+            subtitle: adProvider.adsEnabled ? 'Aktif / Active' : 'Kapalı / Off',
             trailing: Switch(
               value: adProvider.adsEnabled,
               activeTrackColor: AppColors.primary,
@@ -150,21 +164,21 @@ class ProfileScreen extends StatelessWidget {
         if (auth.isAdmin)
           _buildSettingsTile(
             icon: Icons.admin_panel_settings,
-            title: 'Admin Panel',
-            subtitle: 'Yönetim paneline git',
+            title: l.adminPanel,
+            subtitle: l.adminPanelSub,
             iconColor: AppColors.error,
             onTap: () => Navigator.pushNamed(context, '/admin'),
           ),
         _buildSettingsTile(
           icon: Icons.info_outline,
-          title: 'Hakkında',
+          title: l.isTr ? 'Hakkında' : 'About',
           subtitle: 'NCC Campus v1.0.0',
           onTap: () {},
         ),
         if (auth.isLoggedIn)
           _buildSettingsTile(
             icon: Icons.logout,
-            title: 'Çıkış Yap',
+            title: l.logout,
             subtitle: '',
             iconColor: AppColors.error,
             titleColor: AppColors.error,
