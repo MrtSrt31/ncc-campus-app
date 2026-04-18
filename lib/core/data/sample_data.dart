@@ -1,0 +1,98 @@
+import '../models/business_model.dart';
+
+class SampleData {
+  static List<Business> get businesses => [
+        Business(
+          id: '1',
+          name: 'Kampüs Kafe',
+          category: 'Kafe',
+          phone: '0324 123 4567',
+          description: 'Kampüsün en popüler kafesi. Kahve, tost ve daha fazlası.',
+          openHours: '08:00 - 22:00',
+          isOpen: true,
+          rating: 4.2,
+          reviewCount: 128,
+          menu: [
+            MenuItem(name: 'Filtre Kahve', price: 35),
+            MenuItem(name: 'Latte', price: 50),
+            MenuItem(name: 'Tost', price: 45),
+            MenuItem(name: 'Sandviç', price: 55),
+            MenuItem(name: 'Cheesecake', price: 65),
+          ],
+        ),
+        Business(
+          id: '2',
+          name: 'Dürümcü Baba',
+          category: 'Restoran',
+          phone: '0324 234 5678',
+          description: 'En lezzetli dürümler ve kebaplar.',
+          openHours: '11:00 - 23:00',
+          isOpen: true,
+          rating: 4.5,
+          reviewCount: 256,
+          menu: [
+            MenuItem(name: 'Tavuk Dürüm', price: 75),
+            MenuItem(name: 'Et Dürüm', price: 95),
+            MenuItem(name: 'Adana Dürüm', price: 90),
+            MenuItem(name: 'Ayran', price: 15),
+            MenuItem(name: 'Lahmacun', price: 50),
+          ],
+        ),
+        Business(
+          id: '3',
+          name: 'Tekno Market',
+          category: 'Market',
+          phone: '0324 345 6789',
+          description: 'Kampüs içi market. Her türlü ihtiyacınız için.',
+          openHours: '07:00 - 00:00',
+          isOpen: true,
+          rating: 3.8,
+          reviewCount: 89,
+          menu: [],
+        ),
+        Business(
+          id: '4',
+          name: 'Pizza House',
+          category: 'Restoran',
+          phone: '0324 456 7890',
+          description: 'İtalyan pizzalar ve makarnalar.',
+          openHours: '10:00 - 22:00',
+          isOpen: false,
+          rating: 4.0,
+          reviewCount: 167,
+          menu: [
+            MenuItem(name: 'Margarita', price: 110),
+            MenuItem(name: 'Karışık Pizza', price: 140),
+            MenuItem(name: 'Makarna', price: 85),
+            MenuItem(name: 'Cola', price: 25),
+          ],
+        ),
+        Business(
+          id: '5',
+          name: 'Copy Center',
+          category: 'Hizmet',
+          phone: '0324 567 8901',
+          description: 'Fotokopi, baskı ve kırtasiye hizmetleri.',
+          openHours: '09:00 - 18:00',
+          isOpen: true,
+          rating: 4.1,
+          reviewCount: 54,
+          menu: [],
+        ),
+        Business(
+          id: '6',
+          name: 'Kampüs Berber',
+          category: 'Hizmet',
+          phone: '0324 678 9012',
+          description: 'Erkek ve kadın kuaförü.',
+          openHours: '09:00 - 20:00',
+          isOpen: true,
+          rating: 3.9,
+          reviewCount: 73,
+          menu: [],
+        ),
+      ];
+
+  static List<String> get categories =>
+      ['Tümü', 'Kafe', 'Restoran', 'Market', 'Hizmet'];
+}
