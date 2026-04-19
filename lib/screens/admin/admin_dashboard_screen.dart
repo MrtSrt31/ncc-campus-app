@@ -5,6 +5,7 @@ import 'admin_businesses_screen.dart';
 import 'admin_cafeteria_screen.dart';
 import 'admin_users_screen.dart';
 import 'admin_reviews_screen.dart';
+import 'admin_exams_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -151,6 +152,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       subtitle: 'Yorumları incele ve yönet',
                       color: Colors.orange,
                       onTap: () => _navigateTo(const AdminReviewsScreen()),
+                    ),
+                    _AdminTile(
+                      icon: Icons.event_note,
+                      title: 'Sınav Yönetimi',
+                      subtitle: 'Sınav programı PDF yükle ve yönet',
+                      color: Colors.deepOrange,
+                      onTap: () => _navigateTo(const AdminExamsScreen()),
                     ),
                   ],
                 ),

@@ -240,6 +240,33 @@ class AppLocalizations {
   String get manageCafeteria => isTr ? 'Yemekhane Yönetimi' : 'Manage Cafeteria';
   String get manageRing => isTr ? 'Ring Yönetimi' : 'Ring Schedule';
   String get manageReviews => isTr ? 'Değerlendirme Yönetimi' : 'Manage Reviews';
+  String get manageExams => isTr ? 'Sınav Yönetimi' : 'Exam Management';
+
+  // ── Exams ──
+  String get examsTitle => isTr ? 'Sınavlar' : 'Exams';
+  String get examsSub => isTr ? 'Sınav takvimi' : 'Exam schedule';
+  String get selectCourses => isTr ? 'Ders Seç' : 'Select Courses';
+  String get searchCourse => isTr ? 'Ders ara...' : 'Search course...';
+  String get selectAll => isTr ? 'Tümünü Seç' : 'Select All';
+  String get deselectAll => isTr ? 'Tümünü Kaldır' : 'Deselect All';
+  String get selected => isTr ? 'seçili' : 'selected';
+  String get noCourseFound => isTr ? 'Ders bulunamadı' : 'No course found';
+  String get exportCalendar => isTr ? 'Takvime Aktar' : 'Export to Calendar';
+  String get addToCalendar => isTr ? 'Takvime Ekle' : 'Add to Calendar';
+  String get noExamSchedule => isTr ? 'Sınav takvimi yüklenmedi' : 'No exam schedule uploaded';
+  String get noExamScheduleHint => isTr ? 'Sınav takvimi admin tarafından yüklendiğinde burada görünecek' : 'Exam schedule will appear here when uploaded by admin';
+  String get selectCoursesPrompt => isTr ? 'Sınavlarını görmek için derslerini seç' : 'Select your courses to see exams';
+  String get noExamsOnDay => isTr ? 'Bu gün sınav yok' : 'No exams on this day';
+  String get upcomingExams => isTr ? 'Yaklaşan Sınavlar' : 'Upcoming Exams';
+  String get noUpcomingExams => isTr ? 'Yaklaşan sınav yok' : 'No upcoming exams';
+  String get uploadPdf => isTr ? 'PDF Yükle' : 'Upload PDF';
+  String get uploadExamHint => isTr ? 'Sınav programı PDF dosyası yükleyin' : 'Upload exam schedule PDF file';
+  String get examPreview => isTr ? 'Sınav Önizleme' : 'Exam Preview';
+  String get examTypeLabel => isTr ? 'Sınav Türü' : 'Exam Type';
+  String get examsFound => isTr ? 'sınav bulundu' : 'exams found';
+  String get parsedExams => isTr ? 'Bulunan Sınavlar' : 'Parsed Exams';
+  String get noExamsParsed => isTr ? 'PDF\'den sınav çıkarılamadı. Dosya yine de kaydedilecek.' : 'No exams parsed from PDF. File will still be saved.';
+  String get deleteScheduleConfirm => isTr ? 'Bu sınav takvimi ve tüm sınavları silinecek. Devam etmek istiyor musunuz?' : 'This exam schedule and all its exams will be deleted. Continue?';
 
   // ── Misc ──
   String get cancel => isTr ? 'İptal' : 'Cancel';

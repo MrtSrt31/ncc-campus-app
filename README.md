@@ -42,6 +42,16 @@
 - Kullanıcı tercihi: reklamlı veya reklamsız kullanım
 - Kayıt sırasında reklam tercihi seçimi
 
+### Sınav Takvimi
+- Admin panelinden sınav programı PDF yükleme
+- PDF otomatik parse edilir (ders kodu, tarih, saat, yer)
+- Kullanıcı kendi derslerini seçerek kişisel sınav takvimi oluşturur
+- Takvim görünümü (TableCalendar) ile sınavları tarih bazlı gösterim
+- Sınav türü filtreleme (MT1, MT2, Final, Quiz, Make-up)
+- ICS dosyası export ile telefon takvimine ekleme
+- Yerel bildirimler: sınavdan 1 gün önce (20:00) + sınav günü (08:00)
+- Aynı dosya adı tekrar yüklenirse eski veriler otomatik silinip yeniden oluşturulur
+
 ### Admin Paneli
 - **Dashboard**: Genel istatistikler (kullanıcı, işletme, yorum, duyuru sayıları)
 - **İşletme Yönetimi**: CRUD + menü öğeleri yönetimi
@@ -50,6 +60,7 @@
 - **Yemekhane Menüsü Yönetimi**: CRUD + tarih seçimi
 - **Kullanıcı Yönetimi**: Kullanıcı listesi + rol değiştirme (admin/user)
 - **Yorum Yönetimi**: Yorum moderasyonu + silme
+- **Sınav Yönetimi**: PDF yükle → otomatik parse → önizleme → kaydet
 
 ### Kimlik Doğrulama
 - Firebase Authentication (email/password)
@@ -67,20 +78,29 @@ lib/
 ├── core/
 │   ├── theme/
 │   │   └── app_theme.dart             # Dark tema, renkler, stiller
+│   ├── l10n/
+│   │   └── app_localizations.dart     # TR/EN çeviri (100+ anahtar)
 │   ├── providers/
 │   │   ├── auth_provider.dart         # Firebase Auth + rol yönetimi
 │   │   ├── ad_provider.dart           # Reklam tercihi yönetimi
-│   │   └── gpa_provider.dart          # GPA hesaplama mantığı
+│   │   ├── gpa_provider.dart          # GPA hesaplama mantığı
+│   │   ├── locale_provider.dart       # TR/EN dil değiştirme
+│   │   └── exam_provider.dart         # Sınav takvimi state + ICS export
 │   ├── models/
 │   │   ├── user_model.dart            # AppUser modeli (Firestore)
 │   │   ├── business_model.dart        # Business + MenuItem (Firestore)
 │   │   ├── campus_models.dart         # Announcement, RingSchedule, CafeteriaMenu, Review
+│   │   ├── social_models.dart         # Confession, MarketplaceListing, CarpoolRide
+│   │   ├── exam_model.dart            # Exam + ExamScheduleFile (Firestore)
 │   │   └── business.dart              # Legacy model (sample data için)
 │   ├── services/
 │   │   ├── firestore_service.dart     # Firestore CRUD operasyonları
-│   │   └── ad_service.dart            # AdMob singleton servisi
+│   │   ├── ad_service.dart            # AdMob singleton servisi
+│   │   ├── exam_parser_service.dart   # PDF parse + sınav verisi çıkarma
+│   │   └── notification_service.dart  # Yerel bildirim zamanlama
 │   └── data/
-│       └── sample_data.dart           # Örnek veri (offline fallback)
+│       ├── sample_data.dart           # Örnek veri (offline fallback)
+│       └── department_data.dart       # Bölüm ve ders verileri (GPA için)
 ├── screens/
 │   ├── splash_screen.dart             # Animasyonlu açılış
 │   ├── welcome_screen.dart            # Kayıt/Giriş/Misafir seçimi
@@ -94,10 +114,18 @@ lib/
 │   ├── campus/
 │   │   ├── campus_directory_screen.dart # İşletme rehberi
 │   │   ├── business_detail_screen.dart  # İşletme detay
-│   │   ├── announcements_screen.dart    # Duyurular (kullanıcı)
-│   │   ├── ring_schedule_screen.dart    # Ring saatleri (kullanıcı)
-│   │   ├── cafeteria_screen.dart        # Yemekhane menüsü (kullanıcı)
+│   │   ├── announcements_screen.dart    # Duyurular
+│   │   ├── ring_schedule_screen.dart    # Ring saatleri
+│   │   ├── cafeteria_screen.dart        # Yemekhane menüsü
+│   │   ├── transportation_screen.dart   # Ulaşım servisleri
+│   │   ├── this_week_screen.dart        # Kampüste bu hafta
 │   │   └── reviews_screen.dart          # Yorum sayfası
+│   ├── social/
+│   │   ├── confessions_screen.dart      # Anonim itiraflar
+│   │   ├── marketplace_screen.dart      # İkinci el pazar
+│   │   └── carpool_screen.dart          # Araç paylaşım
+│   ├── exams/
+│   │   └── exams_screen.dart            # Sınav takvimi + ders seçimi
 │   ├── profile/
 │   │   └── profile_screen.dart          # Profil + ayarlar
 │   └── admin/
@@ -107,7 +135,8 @@ lib/
 │       ├── admin_ring_schedule_screen.dart # Ring saati CRUD
 │       ├── admin_cafeteria_screen.dart     # Yemekhane CRUD
 │       ├── admin_users_screen.dart         # Kullanıcı yönetimi
-│       └── admin_reviews_screen.dart       # Yorum moderasyonu
+│       ├── admin_reviews_screen.dart       # Yorum moderasyonu
+│       └── admin_exams_screen.dart         # Sınav PDF yükleme + yönetim
 └── widgets/
     └── ad_banner_widget.dart          # AdMob banner widget
 ```
@@ -134,6 +163,13 @@ lib/
 | Intl | 0.20.2 | Tarih formatı |
 | Timeago | 3.7.0 | Zaman gösterimi |
 | Google Sign In | 6.2.2 | Google ile giriş |
+| Table Calendar | 3.1.2 | Takvim görünümü |
+| Flutter Local Notifications | 18.0.0 | Yerel bildirimler |
+| Syncfusion Flutter PDF | 28.1.33 | PDF metin çıkarma |
+| File Picker | 8.1.6 | Dosya seçme |
+| Path Provider | 2.1.5 | Geçici dosya yolu |
+| Share Plus | 10.1.4 | ICS dosya paylaşımı |
+| Timezone | 0.10.0 | Zaman dilimi desteği |
 
 ---
 
@@ -228,6 +264,20 @@ service cloud.firestore {
       allow read: if true;
       allow create: if request.auth != null;
       allow delete: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Sınav takvimleri: herkes okuyabilir, admin yazabilir
+    match /examSchedules/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Sınavlar: herkes okuyabilir, admin yazabilir
+    match /exams/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null && 
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
   }
@@ -331,6 +381,35 @@ flutter run -d chrome
 }
 ```
 
+### `examSchedules` Koleksiyonu
+```json
+{
+  "fileName": "Midterm Exam Schedule.pdf",
+  "downloadUrl": "https://...",
+  "semester": "2025-2026 Spring",
+  "examType": "MT1",
+  "uploadedAt": "timestamp",
+  "isActive": true,
+  "examCount": 42
+}
+```
+
+### `exams` Koleksiyonu
+```json
+{
+  "scheduleId": "string",
+  "courseCode": "CNG 315",
+  "courseName": "Algorithms",
+  "examType": "MT1",
+  "date": "timestamp",
+  "startTime": "09:00",
+  "endTime": "11:00",
+  "building": "SZ",
+  "room": "18",
+  "sections": "1,2"
+}
+```
+
 ---
 
 ## 🎨 Tasarım Sistemi
@@ -363,6 +442,12 @@ flutter run -d chrome
 | `/announcements` | Duyurular |
 | `/ring-schedule` | Ring saatleri |
 | `/cafeteria` | Yemekhane menüsü |
+| `/transportation` | Ulaşım servisleri |
+| `/this-week` | Kampüste bu hafta |
+| `/confessions` | İtiraflar |
+| `/marketplace` | İkinci el pazar |
+| `/carpool` | Araç paylaşım |
+| `/exams` | Sınav takvimi |
 | `/profile` | Profil |
 | `/admin` | Admin paneli |
 

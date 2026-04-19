@@ -12,6 +12,7 @@ import 'core/providers/auth_provider.dart';
 import 'core/providers/ad_provider.dart';
 import 'core/providers/gpa_provider.dart';
 import 'core/providers/locale_provider.dart';
+import 'core/providers/exam_provider.dart';
 import 'core/services/ad_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/welcome_screen.dart';
@@ -31,6 +32,7 @@ import 'screens/social/marketplace_screen.dart';
 import 'screens/social/carpool_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/admin/admin_dashboard_screen.dart';
+import 'screens/exams/exams_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,11 +51,18 @@ void main() async {
     debugPrint('Firebase: Skipping init - placeholder config detected. Run flutterfire configure to set up.');
   }
 
-  try {
-    await AdService.instance.initialize();
-  } catch (e) {
-    debugPrint('AdService init error: $e');
+  // Only initialize ads if Firebase is properly configured
+  if (!firebaseOptions.apiKey.startsWith('PLACEHOLDER')) {
+    try {
+      await AdService.instance.initialize();
+    } catch (e) {
+      debugPrint('AdService init error: $e');
+    }
+  } else {
+    debugPrint('AdService: Skipping init - placeholder Firebase config.');
   }
+
+  // Notification init is deferred - will be initialized lazily when needed by ExamProvider
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -80,6 +89,7 @@ class NccApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AdProvider(prefs)),
         ChangeNotifierProvider(create: (_) => GpaProvider(prefs)),
         ChangeNotifierProvider(create: (_) => LocaleProvider(prefs)),
+        ChangeNotifierProvider(create: (_) => ExamProvider(prefs)),
       ],
       child: Consumer<LocaleProvider>(
         builder: (context, localeProvider, _) => MaterialApp(
@@ -114,6 +124,7 @@ class NccApp extends StatelessWidget {
             '/carpool': (context) => const CarpoolScreen(),
             '/profile': (context) => const ProfileScreen(),
             '/admin': (context) => const AdminDashboardScreen(),
+            '/exams': (context) => const ExamsScreen(),
           },
         ),
       ),

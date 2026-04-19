@@ -217,6 +217,13 @@ class _HomePage extends StatelessWidget {
                     color: Colors.cyan,
                     onTap: () => Navigator.pushNamed(context, '/carpool'),
                   ),
+                  _QuickActionCard(
+                    icon: Icons.event_note,
+                    title: l.examsTitle,
+                    subtitle: l.examsSub,
+                    color: Colors.deepOrange,
+                    onTap: () => Navigator.pushNamed(context, '/exams'),
+                  ),
                   if (auth.isAdmin)
                     _QuickActionCard(
                       icon: Icons.admin_panel_settings,

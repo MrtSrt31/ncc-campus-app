@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import '../models/business_model.dart';
 import '../models/user_model.dart';
 import '../models/campus_models.dart';
+import '../models/exam_model.dart';
 
 import '../models/social_models.dart';
 
@@ -256,5 +257,91 @@ class FirestoreService {
   Future<void> deleteCarpoolRide(String id) async {
     if (!_isAvailable) return;
     await _db.collection('carpool').doc(id).delete();
+  }
+
+  // ── Exam Schedules ─────────────────────────────────────
+  Stream<List<ExamScheduleFile>> streamExamSchedules() {
+    if (!_isAvailable) return Stream.value([]);
+    return _db
+        .collection('examSchedules')
+        .orderBy('uploadedAt', descending: true)
+        .snapshots()
+        .map((s) =>
+            s.docs.map((d) => ExamScheduleFile.fromFirestore(d)).toList());
+  }
+
+  Future<String> addExamSchedule(ExamScheduleFile schedule) async {
+    if (!_isAvailable) return '';
+    final doc =
+        await _db.collection('examSchedules').add(schedule.toFirestore());
+    return doc.id;
+  }
+
+  Future<void> updateExamSchedule(
+      String id, Map<String, dynamic> data) async {
+    if (!_isAvailable) return;
+    await _db.collection('examSchedules').doc(id).update(data);
+  }
+
+  Future<void> deleteExamSchedule(String id) async {
+    if (!_isAvailable) return;
+    // Delete all exams linked to this schedule
+    final exams = await _db
+        .collection('exams')
+        .where('scheduleId', isEqualTo: id)
+        .get();
+    final batch = _db.batch();
+    for (final doc in exams.docs) {
+      batch.delete(doc.reference);
+    }
+    batch.delete(_db.collection('examSchedules').doc(id));
+    await batch.commit();
+  }
+
+  Future<ExamScheduleFile?> findScheduleByFileName(String fileName) async {
+    if (!_isAvailable) return null;
+    final snap = await _db
+        .collection('examSchedules')
+        .where('fileName', isEqualTo: fileName)
+        .limit(1)
+        .get();
+    if (snap.docs.isEmpty) return null;
+    return ExamScheduleFile.fromFirestore(snap.docs.first);
+  }
+
+  // ── Exams ──────────────────────────────────────────────
+  Stream<List<Exam>> streamExams() {
+    if (!_isAvailable) return Stream.value([]);
+    return _db
+        .collection('exams')
+        .orderBy('date')
+        .snapshots()
+        .map((s) => s.docs.map((d) => Exam.fromFirestore(d)).toList());
+  }
+
+  Future<void> addExamsBatch(List<Exam> exams) async {
+    if (!_isAvailable) return;
+    // Firestore batch limit is 500, chunk if needed
+    for (int i = 0; i < exams.length; i += 400) {
+      final chunk = exams.sublist(i, (i + 400).clamp(0, exams.length));
+      final batch = _db.batch();
+      for (final exam in chunk) {
+        batch.set(_db.collection('exams').doc(), exam.toFirestore());
+      }
+      await batch.commit();
+    }
+  }
+
+  Future<void> deleteExamsBySchedule(String scheduleId) async {
+    if (!_isAvailable) return;
+    final snap = await _db
+        .collection('exams')
+        .where('scheduleId', isEqualTo: scheduleId)
+        .get();
+    final batch = _db.batch();
+    for (final doc in snap.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
   }
 }

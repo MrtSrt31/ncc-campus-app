@@ -11,6 +11,12 @@ class AdService {
   BannerAd? _bannerAd;
   InterstitialAd? _interstitialAd;
   bool _isInitialized = false;
+  bool _isDisabled = false;
+
+  /// Call this to permanently disable ads (e.g. placeholder Firebase config)
+  void disable() {
+    _isDisabled = true;
+  }
 
   // Test ad unit IDs - replace with real ones before release
   String get _bannerAdUnitId => Platform.isAndroid
@@ -27,7 +33,7 @@ class AdService {
   //     : 'ca-app-pub-3940256099942544/1712485313'; // iOS test
 
   Future<void> initialize() async {
-    if (_isInitialized) return;
+    if (_isInitialized || _isDisabled) return;
     if (!Platform.isAndroid && !Platform.isIOS) {
       debugPrint('AdService: Ads not supported on this platform');
       return;
