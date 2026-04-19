@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/providers/auth_provider.dart';
+import '../core/providers/app_settings_provider.dart';
 import '../core/theme/app_theme.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -37,7 +38,10 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
       final auth = context.read<AuthProvider>();
-      if (auth.isLoggedIn) {
+      final settings = context.read<AppSettingsProvider>();
+      if (!settings.onboardingSeen) {
+        Navigator.pushReplacementNamed(context, '/onboarding');
+      } else if (auth.isLoggedIn) {
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         Navigator.pushReplacementNamed(context, '/welcome');
@@ -54,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       body: Center(
         child: FadeTransition(
           opacity: _fadeAnimation,
@@ -90,19 +94,19 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text(
+                Text(
                   'NCC Campus',
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: AppColors.txt(context),
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'Kampüs hayatını optimize et',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: AppColors.txtSec(context),
                     fontSize: 14,
                   ),
                 ),

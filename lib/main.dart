@@ -13,9 +13,12 @@ import 'core/providers/ad_provider.dart';
 import 'core/providers/gpa_provider.dart';
 import 'core/providers/locale_provider.dart';
 import 'core/providers/exam_provider.dart';
+import 'core/providers/app_settings_provider.dart';
+import 'core/providers/this_week_provider.dart';
 import 'core/services/ad_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/welcome_screen.dart';
+import 'screens/onboarding_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
@@ -90,12 +93,16 @@ class NccApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GpaProvider(prefs)),
         ChangeNotifierProvider(create: (_) => LocaleProvider(prefs)),
         ChangeNotifierProvider(create: (_) => ExamProvider(prefs)),
+        ChangeNotifierProvider(create: (_) => AppSettingsProvider(prefs)),
+        ChangeNotifierProvider(create: (_) => ThisWeekProvider()),
       ],
-      child: Consumer<LocaleProvider>(
-        builder: (context, localeProvider, _) => MaterialApp(
+      child: Consumer2<LocaleProvider, AppSettingsProvider>(
+        builder: (context, localeProvider, settingsProvider, _) => MaterialApp(
           title: 'NCC Campus',
           debugShowCheckedModeBanner: false,
-          theme: AppTheme.darkTheme,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: settingsProvider.themeMode,
           locale: localeProvider.locale,
           supportedLocales: const [Locale('tr'), Locale('en')],
           localizationsDelegates: const [
@@ -107,6 +114,7 @@ class NccApp extends StatelessWidget {
           initialRoute: '/splash',
           routes: {
             '/splash': (context) => const SplashScreen(),
+            '/onboarding': (context) => const OnboardingScreen(),
             '/welcome': (context) => const WelcomeScreen(),
             '/login': (context) => const LoginScreen(),
             '/register': (context) => const RegisterScreen(),

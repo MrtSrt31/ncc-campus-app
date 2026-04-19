@@ -34,7 +34,7 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
     final l = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: Text(l.gpaSimulator)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -47,8 +47,8 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
             const SizedBox(height: 28),
             Text(
               l.ifIGetGrade,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
+              style: TextStyle(
+                color: AppColors.txt(context),
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
               ),
@@ -56,29 +56,29 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
             const SizedBox(height: 16),
             TextField(
               controller: _courseNameController,
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: AppColors.txt(context)),
               decoration: InputDecoration(hintText: l.courseName),
             ),
             const SizedBox(height: 14),
             TextField(
               controller: _creditsController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: AppColors.txt(context)),
               decoration: InputDecoration(hintText: l.credit),
             ),
             const SizedBox(height: 14),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: AppColors.surf(context),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: _selectedGrade,
                   isExpanded: true,
-                  dropdownColor: AppColors.surface,
-                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                  dropdownColor: AppColors.surf(context),
+                  style: TextStyle(color: AppColors.txt(context), fontSize: 16),
                   items: GpaProvider.gradePoints.keys
                       .map((g) => DropdownMenuItem(value: g, child: Text(g)))
                       .toList(),
@@ -116,8 +116,8 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
             const SizedBox(height: 40),
             Text(
               l.targetGpaQuestion,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
+              style: TextStyle(
+                color: AppColors.txt(context),
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
               ),
@@ -126,7 +126,7 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
             TextField(
               controller: _targetGpaController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: AppColors.txt(context)),
               decoration: InputDecoration(hintText: l.targetGpaHint),
             ),
             const SizedBox(height: 20),
@@ -166,9 +166,9 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
     final l = AppLocalizations.of(context);
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -180,12 +180,12 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
             children: [
               Text(
                 l.currentGpa,
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                style: TextStyle(color: AppColors.txtSec(context), fontSize: 13),
               ),
               Text(
                 gpa.currentGpa.toStringAsFixed(2),
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
+                style: TextStyle(
+                  color: AppColors.txt(context),
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
                 ),
@@ -195,7 +195,7 @@ class _GpaSimulatorScreenState extends State<GpaSimulatorScreen> {
           const Spacer(),
           Text(
             l.coursesCredits(gpa.courses.length, gpa.totalCredits.toStringAsFixed(0)),
-            style: const TextStyle(color: AppColors.textHint, fontSize: 13),
+            style: TextStyle(color: AppColors.txtHint(context), fontSize: 13),
           ),
         ],
       ),

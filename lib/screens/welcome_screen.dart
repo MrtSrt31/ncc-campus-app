@@ -9,7 +9,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -43,22 +43,22 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-              const Text(
+              Text(
                 'NCC Campus\'a\nHoş Geldin',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: AppColors.txt(context),
                   fontSize: 32,
                   fontWeight: FontWeight.w800,
                   height: 1.2,
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'GPA hesapla, kampüs işletmelerini keşfet,\nders ve hoca yorumlarını gör.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: AppColors.textSecondary,
+                  color: AppColors.txtSec(context),
                   fontSize: 15,
                   height: 1.5,
                 ),
@@ -87,10 +87,10 @@ class WelcomeScreen extends StatelessWidget {
                   context.read<AuthProvider>().continueAsGuest();
                   Navigator.pushReplacementNamed(context, '/home');
                 },
-                child: const Text(
+                child: Text(
                   'Reklamlı olarak devam et',
                   style: TextStyle(
-                    color: AppColors.textHint,
+                    color: AppColors.txtHint(context),
                     fontSize: 14,
                   ),
                 ),

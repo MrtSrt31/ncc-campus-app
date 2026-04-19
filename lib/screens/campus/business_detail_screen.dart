@@ -16,7 +16,7 @@ class BusinessDetailScreen extends StatelessWidget {
     final displayName = (!l.isTr && business.nameEn.isNotEmpty) ? business.nameEn : business.name;
     final displayDesc = (!l.isTr && business.descriptionEn.isNotEmpty) ? business.descriptionEn : business.description;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(
         title: Text(displayName),
       ),
@@ -46,8 +46,8 @@ class BusinessDetailScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           displayName,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
+                          style: TextStyle(
+                            color: AppColors.txt(context),
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
                           ),
@@ -78,8 +78,8 @@ class BusinessDetailScreen extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         '${business.rating}',
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
+                        style: TextStyle(
+                          color: AppColors.txt(context),
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -87,42 +87,42 @@ class BusinessDetailScreen extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         '(${business.reviewCount} ${l.isTr ? 'değerlendirme' : 'reviews'})',
-                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                        style: TextStyle(color: AppColors.txtSec(context), fontSize: 14),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   Text(
                     displayDesc,
-                    style: const TextStyle(
-                      color: AppColors.textSecondary,
+                    style: TextStyle(
+                      color: AppColors.txtSec(context),
                       fontSize: 15,
                       height: 1.5,
                     ),
                   ),
                   const SizedBox(height: 24),
-                  _buildInfoRow(Icons.access_time, business.openHours),
+                  _buildInfoRow(context, Icons.access_time, business.openHours),
                   if (business.phone.isNotEmpty) ...[
                     const SizedBox(height: 12),
                     GestureDetector(
                       onTap: () => _makeCall(business.phone),
-                      child: _buildInfoRow(Icons.phone, business.phone, isLink: true),
+                      child: _buildInfoRow(context, Icons.phone, business.phone, isLink: true),
                     ),
                   ],
                   const SizedBox(height: 12),
-                  _buildInfoRow(Icons.category, business.category),
+                  _buildInfoRow(context, Icons.category, business.category),
                   if (business.menu.isNotEmpty) ...[
                     const SizedBox(height: 32),
-                    const Text(
+                    Text(
                       'Menü / Menu',
                       style: TextStyle(
-                        color: AppColors.textPrimary,
+                        color: AppColors.txt(context),
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 16),
-                    ...business.menu.map(_buildMenuItem),
+                    ...business.menu.map((item) => _buildMenuItem(context, item)),
                   ],
                   const SizedBox(height: 32),
                   SizedBox(
@@ -155,15 +155,15 @@ class BusinessDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String text, {bool isLink = false}) {
+  Widget _buildInfoRow(BuildContext context, IconData icon, String text, {bool isLink = false}) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.textHint, size: 20),
-        const SizedBox(width: 12),
+        Icon(icon, color: AppColors.txtHint(context), size: 20),
+        SizedBox(width: 12),
         Text(
           text,
           style: TextStyle(
-            color: isLink ? AppColors.accent : AppColors.textSecondary,
+            color: isLink ? AppColors.accent : AppColors.txtSec(context),
             fontSize: 15,
             decoration: isLink ? TextDecoration.underline : null,
           ),
@@ -172,12 +172,12 @@ class BusinessDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(MenuItem item) {
+  Widget _buildMenuItem(BuildContext context, MenuItem item) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -185,8 +185,8 @@ class BusinessDetailScreen extends StatelessWidget {
           Expanded(
             child: Text(
               item.name,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
+              style: TextStyle(
+                color: AppColors.txt(context),
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
               ),

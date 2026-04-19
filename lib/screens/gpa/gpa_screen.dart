@@ -26,7 +26,7 @@ class _GpaScreenState extends State<GpaScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surf(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -45,7 +45,7 @@ class _GpaScreenState extends State<GpaScreen> {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceLight,
+                      color: AppColors.surfLight(context),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -53,8 +53,8 @@ class _GpaScreenState extends State<GpaScreen> {
                 const SizedBox(height: 20),
                 Text(
                   l.addCourse,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
+                  style: TextStyle(
+                    color: AppColors.txt(context),
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
                   ),
@@ -63,19 +63,19 @@ class _GpaScreenState extends State<GpaScreen> {
                 // Department selector
                 if (!manualMode) ...[
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
+                      color: AppColors.surf(context),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: AppColors.surfaceLight),
+                      border: Border.all(color: AppColors.surfLight(context)),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<Department>(
                         value: selectedDept,
                         isExpanded: true,
-                        hint: Text(l.selectDepartment, style: const TextStyle(color: AppColors.textHint)),
-                        dropdownColor: AppColors.surface,
-                        style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+                        hint: Text(l.selectDepartment, style: TextStyle(color: AppColors.txtHint(context))),
+                        dropdownColor: AppColors.surf(context),
+                        style: TextStyle(color: AppColors.txt(context), fontSize: 14),
                         items: DepartmentData.departments.map((d) =>
                           DropdownMenuItem(
                             value: d,
@@ -91,19 +91,19 @@ class _GpaScreenState extends State<GpaScreen> {
                   if (selectedDept != null) ...[
                     const SizedBox(height: 12),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
-                        color: AppColors.surface,
+                        color: AppColors.surf(context),
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: AppColors.surfaceLight),
+                        border: Border.all(color: AppColors.surfLight(context)),
                       ),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<DepartmentCourse>(
                           value: selectedCourse,
                           isExpanded: true,
-                          hint: Text(l.selectCourse, style: const TextStyle(color: AppColors.textHint)),
-                          dropdownColor: AppColors.surface,
-                          style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+                          hint: Text(l.selectCourse, style: TextStyle(color: AppColors.txtHint(context))),
+                          dropdownColor: AppColors.surf(context),
+                          style: TextStyle(color: AppColors.txt(context), fontSize: 14),
                           items: selectedDept!.courses.map((c) =>
                             DropdownMenuItem(
                               value: c,
@@ -139,30 +139,30 @@ class _GpaScreenState extends State<GpaScreen> {
                 const SizedBox(height: 8),
                 TextField(
                   controller: nameController,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(hintText: l.courseName),
                 ),
                 const SizedBox(height: 14),
                 TextField(
                   controller: creditsController,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(hintText: l.creditHint),
                 ),
                 const SizedBox(height: 14),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: AppColors.surf(context),
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.surfaceLight),
+                    border: Border.all(color: AppColors.surfLight(context)),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: selectedGrade,
                       isExpanded: true,
-                      dropdownColor: AppColors.surface,
-                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                      dropdownColor: AppColors.surf(context),
+                      style: TextStyle(color: AppColors.txt(context), fontSize: 16),
                       items: GpaProvider.gradePoints.keys
                           .map((g) => DropdownMenuItem(value: g, child: Text(g)))
                           .toList(),
@@ -215,7 +215,7 @@ class _GpaScreenState extends State<GpaScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(
         title: Text(l.gpaTitle),
         actions: [
@@ -225,8 +225,8 @@ class _GpaScreenState extends State<GpaScreen> {
             onPressed: () => Navigator.pushNamed(context, '/gpa-simulator'),
           ),
           PopupMenuButton(
-            icon: const Icon(Icons.more_vert),
-            color: AppColors.surface,
+            icon: Icon(Icons.more_vert),
+            color: AppColors.surf(context),
             itemBuilder: (_) => [
               PopupMenuItem(
                 value: 'clear',
@@ -287,13 +287,13 @@ class _GpaScreenState extends State<GpaScreen> {
               children: [
                 Text(
                   l.overallGpa,
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                  style: TextStyle(color: AppColors.txtSec(context), fontSize: 14),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   gpa.currentGpa.toStringAsFixed(2),
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
+                  style: TextStyle(
+                    color: AppColors.txt(context),
                     fontSize: 42,
                     fontWeight: FontWeight.w800,
                   ),
@@ -306,7 +306,7 @@ class _GpaScreenState extends State<GpaScreen> {
             children: [
               Text(
                 '${gpa.courses.length} ${l.courses}',
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                style: TextStyle(color: AppColors.txtSec(context), fontSize: 14),
               ),
               const SizedBox(height: 4),
               Text(
@@ -329,16 +329,16 @@ class _GpaScreenState extends State<GpaScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.school_outlined, size: 64, color: AppColors.textHint.withValues(alpha: 0.5)),
+          Icon(Icons.school_outlined, size: 64, color: AppColors.txtHint(context).withValues(alpha: 0.5)),
           const SizedBox(height: 16),
           Text(
             l.noCourses,
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 16),
+            style: TextStyle(color: AppColors.txtSec(context), fontSize: 16),
           ),
           const SizedBox(height: 8),
           Text(
             l.addCoursesHint,
-            style: const TextStyle(color: AppColors.textHint, fontSize: 14),
+            style: TextStyle(color: AppColors.txtHint(context), fontSize: 14),
           ),
         ],
       ),
@@ -367,9 +367,9 @@ class _GpaScreenState extends State<GpaScreen> {
           onDismissed: (_) => gpa.removeCourse(index),
           child: Container(
             margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.all(18),
+            padding: EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: AppColors.card,
+              color: AppColors.cardBg(context),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(
@@ -399,8 +399,8 @@ class _GpaScreenState extends State<GpaScreen> {
                     children: [
                       Text(
                         course.name,
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
+                        style: TextStyle(
+                          color: AppColors.txt(context),
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -408,7 +408,7 @@ class _GpaScreenState extends State<GpaScreen> {
                       const SizedBox(height: 4),
                       Text(
                         '${course.credits.toStringAsFixed(0)} ${l.credit}',
-                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                        style: TextStyle(color: AppColors.txtSec(context), fontSize: 13),
                       ),
                     ],
                   ),

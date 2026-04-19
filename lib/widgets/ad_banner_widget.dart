@@ -69,21 +69,21 @@ class _AdBannerWidgetState extends State<AdBannerWidget> {
     return Container(
       width: double.infinity,
       height: 60,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: AppColors.surfLight(context),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: AppColors.div(context)),
       ),
-      child: const Center(
+      child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.campaign_outlined, color: AppColors.textHint, size: 18),
+            Icon(Icons.campaign_outlined, color: AppColors.txtHint(context), size: 18),
             SizedBox(width: 8),
             Text(
               'Reklam Alanı',
-              style: TextStyle(color: AppColors.textHint, fontSize: 13),
+              style: TextStyle(color: AppColors.txtHint(context), fontSize: 13),
             ),
           ],
         ),

@@ -37,7 +37,7 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surf(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -49,7 +49,7 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
           expand: false,
           builder: (_, scrollController) => SingleChildScrollView(
             controller: scrollController,
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -57,7 +57,7 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
                   child: Container(
                     width: 40, height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceLight,
+                      color: AppColors.surfLight(context),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -65,8 +65,8 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
                 const SizedBox(height: 20),
                 Text(
                   business == null ? 'Yeni İşletme' : 'İşletme Düzenle',
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
+                  style: TextStyle(
+                    color: AppColors.txt(context),
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
                   ),
@@ -81,7 +81,7 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
                 _buildField(hoursC, 'Çalışma Saatleri (ör: 08:00 - 22:00)'),
                 const SizedBox(height: 8),
                 SwitchListTile(
-                  title: const Text('Açık mı?', style: TextStyle(color: AppColors.textPrimary)),
+                  title: Text('Açık mı?', style: TextStyle(color: AppColors.txt(context))),
                   value: isOpen,
                   activeTrackColor: AppColors.success,
                   contentPadding: EdgeInsets.zero,
@@ -90,10 +90,10 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       'Menü Öğeleri',
                       style: TextStyle(
-                        color: AppColors.textPrimary,
+                        color: AppColors.txt(context),
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -123,7 +123,7 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
                           flex: 3,
                           child: TextField(
                             controller: mc.name,
-                            style: const TextStyle(color: AppColors.textPrimary),
+                            style: TextStyle(color: AppColors.txt(context)),
                             decoration: const InputDecoration(hintText: 'Ürün adı'),
                           ),
                         ),
@@ -133,7 +133,7 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
                           child: TextField(
                             controller: mc.price,
                             keyboardType: TextInputType.number,
-                            style: const TextStyle(color: AppColors.textPrimary),
+                            style: TextStyle(color: AppColors.txt(context)),
                             decoration: const InputDecoration(hintText: '₺'),
                           ),
                         ),
@@ -200,7 +200,7 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
       child: TextField(
         controller: c,
         maxLines: maxLines,
-        style: const TextStyle(color: AppColors.textPrimary),
+        style: TextStyle(color: AppColors.txt(context)),
         decoration: InputDecoration(hintText: hint),
       ),
     );
@@ -210,7 +210,7 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: Text(l.manageBusinesses)),
       body: StreamBuilder<List<Business>>(
         stream: _firestore.streamBusinesses(),
@@ -220,8 +220,8 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
           }
           final businesses = snapshot.data ?? [];
           if (businesses.isEmpty) {
-            return const Center(
-              child: Text('Henüz işletme eklenmedi', style: TextStyle(color: AppColors.textSecondary)),
+            return Center(
+              child: Text('Henüz işletme eklenmedi', style: TextStyle(color: AppColors.txtSec(context))),
             );
           }
           return ListView.builder(
@@ -231,9 +231,9 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
               final biz = businesses[index];
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.card,
+                  color: AppColors.cardBg(context),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Row(
@@ -255,15 +255,15 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(biz.name, style: const TextStyle(
-                            color: AppColors.textPrimary, fontSize: 15, fontWeight: FontWeight.w600,
+                          Text(biz.name, style: TextStyle(
+                            color: AppColors.txt(context), fontSize: 15, fontWeight: FontWeight.w600,
                           )),
                           if (biz.nameEn.isNotEmpty)
-                            Text(biz.nameEn, style: const TextStyle(
-                              color: AppColors.textSecondary, fontSize: 12, fontStyle: FontStyle.italic,
+                            Text(biz.nameEn, style: TextStyle(
+                              color: AppColors.txtSec(context), fontSize: 12, fontStyle: FontStyle.italic,
                             )),
                           Text('${biz.category} • ${biz.menu.length} ${l.isTr ? 'menü öğesi' : 'menu items'}',
-                            style: const TextStyle(color: AppColors.textHint, fontSize: 12)),
+                            style: TextStyle(color: AppColors.txtHint(context), fontSize: 12)),
                         ],
                       ),
                     ),
@@ -295,9 +295,9 @@ class _AdminBusinessesScreenState extends State<AdminBusinessesScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text('Silmek istediğine emin misin?', style: TextStyle(color: AppColors.textPrimary)),
-        content: Text('"${biz.name}" silinecek.', style: const TextStyle(color: AppColors.textSecondary)),
+        backgroundColor: AppColors.surf(context),
+        title: Text('Silmek istediğine emin misin?', style: TextStyle(color: AppColors.txt(context))),
+        content: Text('"${biz.name}" silinecek.', style: TextStyle(color: AppColors.txtSec(context))),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('İptal')),
           TextButton(

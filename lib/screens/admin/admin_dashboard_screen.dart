@@ -40,7 +40,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(
         title: const Text('Admin Panel'),
         actions: [
@@ -63,10 +63,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Genel Bakış',
                       style: TextStyle(
-                        color: AppColors.textPrimary,
+                        color: AppColors.txt(context),
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                       ),
@@ -116,10 +116,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       ],
                     ),
                     const SizedBox(height: 32),
-                    const Text(
+                    Text(
                       'Yönetim',
                       style: TextStyle(
-                        color: AppColors.textPrimary,
+                        color: AppColors.txt(context),
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                       ),
@@ -242,9 +242,9 @@ class _AdminTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(18),
+        padding: EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: AppColors.card,
+          color: AppColors.cardBg(context),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -265,8 +265,8 @@ class _AdminTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
+                    style: TextStyle(
+                      color: AppColors.txt(context),
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
@@ -274,12 +274,12 @@ class _AdminTile extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: const TextStyle(color: AppColors.textHint, fontSize: 13),
+                    style: TextStyle(color: AppColors.txtHint(context), fontSize: 13),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.textHint),
+            Icon(Icons.chevron_right, color: AppColors.txtHint(context)),
           ],
         ),
       ),

@@ -25,7 +25,7 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: Text(l.manageExams)),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _uploading ? null : _uploadExamSchedule,
@@ -51,17 +51,17 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.upload_file,
-                        color: AppColors.textHint, size: 64),
+                    Icon(Icons.upload_file,
+                        color: AppColors.txtHint(context), size: 64),
                     const SizedBox(height: 16),
                     Text(l.noExamSchedule,
-                        style: const TextStyle(
-                            color: AppColors.textSecondary, fontSize: 16)),
+                        style: TextStyle(
+                            color: AppColors.txtSec(context), fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(l.uploadExamHint,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: AppColors.textHint, fontSize: 13)),
+                        style: TextStyle(
+                            color: AppColors.txtHint(context), fontSize: 13)),
                   ],
                 ),
               ),
@@ -255,10 +255,10 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: AppColors.surface,
+          backgroundColor: AppColors.surf(context),
           title: Text(
             l.examPreview,
-            style: const TextStyle(color: AppColors.textPrimary),
+            style: TextStyle(color: AppColors.txt(context)),
           ),
           content: SizedBox(
             width: double.maxFinite,
@@ -269,9 +269,9 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                 children: [
                   // File info
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.card,
+                      color: AppColors.cardBg(context),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -284,8 +284,8 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(fileName,
-                                  style: const TextStyle(
-                                      color: AppColors.textPrimary,
+                                  style: TextStyle(
+                                      color: AppColors.txt(context),
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600)),
                               Text(
@@ -312,18 +312,18 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                       labelText: l.semester,
                       hintText: '2025-2026 Spring',
                       labelStyle:
-                          const TextStyle(color: AppColors.textSecondary),
-                      hintStyle: const TextStyle(color: AppColors.textHint),
+                          TextStyle(color: AppColors.txtSec(context)),
+                      hintStyle: TextStyle(color: AppColors.txtHint(context)),
                     ),
-                    style: const TextStyle(color: AppColors.textPrimary),
+                    style: TextStyle(color: AppColors.txt(context)),
                   ),
                   const SizedBox(height: 12),
 
                   // Exam type selector
                   Text(l.examTypeLabel,
-                      style: const TextStyle(
-                          color: AppColors.textSecondary, fontSize: 13)),
-                  const SizedBox(height: 8),
+                      style: TextStyle(
+                          color: AppColors.txtSec(context), fontSize: 13)),
+                  SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
                     children: ['MT1', 'MT2', 'Final', 'Quiz', 'Make-up']
@@ -336,9 +336,9 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                               labelStyle: TextStyle(
                                 color: selectedExamType == type
                                     ? Colors.white
-                                    : AppColors.textPrimary,
+                                    : AppColors.txt(context),
                               ),
-                              backgroundColor: AppColors.card,
+                              backgroundColor: AppColors.cardBg(context),
                             ))
                         .toList(),
                   ),
@@ -348,8 +348,8 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                   if (parsedExams.isNotEmpty) ...[
                     Text(
                       '${l.parsedExams} (${parsedExams.length}):',
-                      style: const TextStyle(
-                          color: AppColors.textPrimary,
+                      style: TextStyle(
+                          color: AppColors.txt(context),
                           fontSize: 14,
                           fontWeight: FontWeight.w600),
                     ),
@@ -364,9 +364,9 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                           return Container(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 6, horizontal: 10),
-                            margin: const EdgeInsets.only(bottom: 4),
+                            margin: EdgeInsets.only(bottom: 4),
                             decoration: BoxDecoration(
-                              color: AppColors.card,
+                              color: AppColors.cardBg(context),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Row(
@@ -374,24 +374,24 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                                 Expanded(
                                   flex: 2,
                                   child: Text(e.courseCode,
-                                      style: const TextStyle(
-                                          color: AppColors.textPrimary,
+                                      style: TextStyle(
+                                          color: AppColors.txt(context),
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600)),
                                 ),
                                 Expanded(
                                   flex: 2,
                                   child: Text(e.date,
-                                      style: const TextStyle(
-                                          color: AppColors.textSecondary,
+                                      style: TextStyle(
+                                          color: AppColors.txtSec(context),
                                           fontSize: 12)),
                                 ),
                                 Expanded(
                                   flex: 2,
                                   child: Text(
                                       '${e.startTime}-${e.endTime}',
-                                      style: const TextStyle(
-                                          color: AppColors.textSecondary,
+                                      style: TextStyle(
+                                          color: AppColors.txtSec(context),
                                           fontSize: 12)),
                                 ),
                                 Expanded(
@@ -399,8 +399,8 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                                       e.building.isNotEmpty
                                           ? '${e.building}-${e.room}'
                                           : '',
-                                      style: const TextStyle(
-                                          color: AppColors.textHint,
+                                      style: TextStyle(
+                                          color: AppColors.txtHint(context),
                                           fontSize: 12)),
                                 ),
                               ],
@@ -442,7 +442,7 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
             TextButton(
               onPressed: () => Navigator.pop(ctx),
               child: Text(l.cancel,
-                  style: const TextStyle(color: AppColors.textSecondary)),
+                  style: TextStyle(color: AppColors.txtSec(context))),
             ),
             ElevatedButton(
               onPressed: () {
@@ -465,7 +465,7 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surf(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -484,7 +484,7 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
               ..sort((a, b) => a.date.compareTo(b.date));
 
             return Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -493,7 +493,7 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: AppColors.textHint,
+                        color: AppColors.txtHint(context),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -501,16 +501,16 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                   const SizedBox(height: 16),
                   Text(
                     '${schedule.examType} - ${schedule.semester}',
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
+                    style: TextStyle(
+                      color: AppColors.txt(context),
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   Text(
                     '${scheduleExams.length} sınav',
-                    style: const TextStyle(
-                        color: AppColors.textHint, fontSize: 13),
+                    style: TextStyle(
+                        color: AppColors.txtHint(context), fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   Expanded(
@@ -521,9 +521,9 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                         final exam = scheduleExams[i];
                         return Container(
                           padding: const EdgeInsets.all(12),
-                          margin: const EdgeInsets.only(bottom: 8),
+                          margin: EdgeInsets.only(bottom: 8),
                           decoration: BoxDecoration(
-                            color: AppColors.card,
+                            color: AppColors.cardBg(context),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
@@ -531,8 +531,8 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                               Expanded(
                                 flex: 3,
                                 child: Text(exam.courseCode,
-                                    style: const TextStyle(
-                                        color: AppColors.textPrimary,
+                                    style: TextStyle(
+                                        color: AppColors.txt(context),
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600)),
                               ),
@@ -540,23 +540,23 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
                                 flex: 3,
                                 child: Text(
                                     DateFormat('d MMM yyyy').format(exam.date),
-                                    style: const TextStyle(
-                                        color: AppColors.textSecondary,
+                                    style: TextStyle(
+                                        color: AppColors.txtSec(context),
                                         fontSize: 13)),
                               ),
                               Expanded(
                                 flex: 2,
                                 child: Text(
                                     '${exam.startTime}-${exam.endTime}',
-                                    style: const TextStyle(
-                                        color: AppColors.textSecondary,
+                                    style: TextStyle(
+                                        color: AppColors.txtSec(context),
                                         fontSize: 13)),
                               ),
                               Expanded(
                                 flex: 2,
                                 child: Text(exam.locationString,
-                                    style: const TextStyle(
-                                        color: AppColors.textHint,
+                                    style: TextStyle(
+                                        color: AppColors.txtHint(context),
                                         fontSize: 13)),
                               ),
                             ],
@@ -581,18 +581,18 @@ class _AdminExamsScreenState extends State<AdminExamsScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.surf(context),
         title: Text(l.delete,
-            style: const TextStyle(color: AppColors.textPrimary)),
+            style: TextStyle(color: AppColors.txt(context))),
         content: Text(
           '${schedule.fileName}\n\n${l.deleteScheduleConfirm}',
-          style: const TextStyle(color: AppColors.textSecondary),
+          style: TextStyle(color: AppColors.txtSec(context)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(l.cancel,
-                style: const TextStyle(color: AppColors.textSecondary)),
+                style: TextStyle(color: AppColors.txtSec(context))),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -650,9 +650,9 @@ class _ScheduleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -676,15 +676,15 @@ class _ScheduleCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(schedule.fileName,
-                        style: const TextStyle(
-                            color: AppColors.textPrimary,
+                        style: TextStyle(
+                            color: AppColors.txt(context),
                             fontSize: 15,
                             fontWeight: FontWeight.w600)),
                     const SizedBox(height: 2),
                     Text(
                       '${schedule.examType} • ${schedule.semester}',
-                      style: const TextStyle(
-                          color: AppColors.textSecondary, fontSize: 13),
+                      style: TextStyle(
+                          color: AppColors.txtSec(context), fontSize: 13),
                     ),
                   ],
                 ),
@@ -712,8 +712,8 @@ class _ScheduleCard extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 DateFormat('d MMM yyyy HH:mm').format(schedule.uploadedAt),
-                style: const TextStyle(
-                    color: AppColors.textHint, fontSize: 12),
+                style: TextStyle(
+                    color: AppColors.txtHint(context), fontSize: 12),
               ),
               const Spacer(),
               IconButton(

@@ -60,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       context: context,
       barrierDismissible: false,
       builder: (ctx) => Dialog(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.surf(context),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.all(28),
@@ -81,20 +81,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'Hoş geldin! 🎉',
                 style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: AppColors.txt(context),
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 'Uygulamayı nasıl kullanmak istersin?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: AppColors.textSecondary,
+                  color: AppColors.txtSec(context),
                   fontSize: 15,
                 ),
               ),
@@ -137,9 +137,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    side: const BorderSide(color: AppColors.surfaceLight),
+                    side: BorderSide(color: AppColors.surfLight(context)),
                   ),
-                  child: const Column(
+                  child: Column(
                     children: [
                       Text(
                         'Reklamsız',
@@ -148,7 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       SizedBox(height: 4),
                       Text(
                         '⚠ Geliştirme desteği yok',
-                        style: TextStyle(fontSize: 11, color: AppColors.textHint),
+                        style: TextStyle(fontSize: 11, color: AppColors.txtHint(context)),
                       ),
                     ],
                   ),
@@ -164,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(backgroundColor: Colors.transparent),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -175,29 +175,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                const Text(
+                Text(
                   'Üye Ol',
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: AppColors.txt(context),
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'METU NCC e-posta adresinle kayıt ol',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: AppColors.txtSec(context),
                     fontSize: 15,
                   ),
                 ),
                 const SizedBox(height: 48),
                 TextFormField(
                   controller: _nameController,
-                  style: const TextStyle(color: AppColors.textPrimary),
-                  decoration: const InputDecoration(
+                  style: TextStyle(color: AppColors.txt(context)),
+                  decoration: InputDecoration(
                     hintText: 'Ad Soyad',
-                    prefixIcon: Icon(Icons.person_outline, color: AppColors.textHint),
+                    prefixIcon: Icon(Icons.person_outline, color: AppColors.txtHint(context)),
                   ),
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'İsim gerekli';
@@ -208,10 +208,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(color: AppColors.textPrimary),
-                  decoration: const InputDecoration(
+                  style: TextStyle(color: AppColors.txt(context)),
+                  decoration: InputDecoration(
                     hintText: 'E-posta (.edu.tr)',
-                    prefixIcon: Icon(Icons.email_outlined, color: AppColors.textHint),
+                    prefixIcon: Icon(Icons.email_outlined, color: AppColors.txtHint(context)),
                   ),
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'E-posta gerekli';
@@ -223,14 +223,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(
                     hintText: 'Şifre',
-                    prefixIcon: const Icon(Icons.lock_outline, color: AppColors.textHint),
+                    prefixIcon: Icon(Icons.lock_outline, color: AppColors.txtHint(context)),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                        color: AppColors.textHint,
+                        color: AppColors.txtHint(context),
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                     ),
@@ -265,10 +265,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onPressed: () {
                       Navigator.pushReplacementNamed(context, '/login');
                     },
-                    child: const Text.rich(
+                    child: Text.rich(
                       TextSpan(
                         text: 'Zaten üye misin? ',
-                        style: TextStyle(color: AppColors.textSecondary),
+                        style: TextStyle(color: AppColors.txtSec(context)),
                         children: [
                           TextSpan(
                             text: 'Giriş Yap',

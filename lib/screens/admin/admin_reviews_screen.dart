@@ -11,7 +11,7 @@ class AdminReviewsScreen extends StatelessWidget {
     final firestore = FirestoreService();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: const Text('Yorum Yönetimi')),
       body: StreamBuilder<List<Review>>(
         stream: firestore.streamAllReviews(),
@@ -21,8 +21,8 @@ class AdminReviewsScreen extends StatelessWidget {
           }
           final reviews = snapshot.data ?? [];
           if (reviews.isEmpty) {
-            return const Center(
-              child: Text('Henüz yorum yok', style: TextStyle(color: AppColors.textSecondary)),
+            return Center(
+              child: Text('Henüz yorum yok', style: TextStyle(color: AppColors.txtSec(context))),
             );
           }
           return ListView.builder(
@@ -32,9 +32,9 @@ class AdminReviewsScreen extends StatelessWidget {
               final review = reviews[index];
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.card,
+                  color: AppColors.cardBg(context),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Column(
@@ -44,8 +44,8 @@ class AdminReviewsScreen extends StatelessWidget {
                       children: [
                         Text(
                           review.userName,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w600,
+                          style: TextStyle(
+                            color: AppColors.txt(context), fontSize: 14, fontWeight: FontWeight.w600,
                           ),
                         ),
                         const Spacer(),
@@ -61,26 +61,26 @@ class AdminReviewsScreen extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       '${review.targetType} • ${review.targetId}',
-                      style: const TextStyle(color: AppColors.textHint, fontSize: 11),
+                      style: TextStyle(color: AppColors.txtHint(context), fontSize: 11),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       review.comment,
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                      style: TextStyle(color: AppColors.txtSec(context), fontSize: 14),
                     ),
                     const SizedBox(height: 8),
                     Align(
                       alignment: Alignment.centerRight,
                       child: IconButton(
-                        icon: const Icon(Icons.delete_outline, color: AppColors.error, size: 20),
+                        icon: Icon(Icons.delete_outline, color: AppColors.error, size: 20),
                         onPressed: () {
                           showDialog(
                             context: context,
                             builder: (ctx) => AlertDialog(
-                              backgroundColor: AppColors.surface,
-                              title: const Text('Yorumu Sil', style: TextStyle(color: AppColors.textPrimary)),
-                              content: const Text('Bu yorumu silmek istediğine emin misin?',
-                                style: TextStyle(color: AppColors.textSecondary)),
+                              backgroundColor: AppColors.surf(context),
+                              title: Text('Yorumu Sil', style: TextStyle(color: AppColors.txt(context))),
+                              content: Text('Bu yorumu silmek istediğine emin misin?',
+                                style: TextStyle(color: AppColors.txtSec(context))),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(ctx),

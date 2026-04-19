@@ -214,6 +214,13 @@ class AppLocalizations {
   String get language => isTr ? 'Dil' : 'Language';
   String get turkish => isTr ? 'Türkçe' : 'Turkish';
   String get english => isTr ? 'İngilizce' : 'English';
+    String get themeMode => isTr ? 'Tema Modu' : 'Theme Mode';
+    String get themeSystem => isTr ? 'Sistem' : 'System';
+    String get themeLight => isTr ? 'Aydınlık' : 'Light';
+    String get themeDark => isTr ? 'Karanlık' : 'Dark';
+    String get examNotifications => isTr ? 'Sınav Bildirimleri' : 'Exam Notifications';
+    String get active => isTr ? 'Aktif' : 'Active';
+    String get off => isTr ? 'Kapalı' : 'Off';
   String get showAds => isTr ? 'Reklamları Göster' : 'Show Ads';
   String get guest => isTr ? 'Misafir' : 'Guest';
 

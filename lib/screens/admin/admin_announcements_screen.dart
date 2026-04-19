@@ -31,7 +31,7 @@ class _AdminAnnouncementsScreenState extends State<AdminAnnouncementsScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surf(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -47,7 +47,7 @@ class _AdminAnnouncementsScreenState extends State<AdminAnnouncementsScreen> {
                   child: Container(
                     width: 40, height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceLight,
+                      color: AppColors.surfLight(context),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -55,37 +55,37 @@ class _AdminAnnouncementsScreenState extends State<AdminAnnouncementsScreen> {
                 const SizedBox(height: 20),
                 Text(
                   item == null ? 'Yeni Duyuru / Etkinlik' : 'Düzenle',
-                  style: const TextStyle(
-                    color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.w700,
+                  style: TextStyle(
+                    color: AppColors.txt(context), fontSize: 22, fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 24),
                 TextField(
                   controller: titleC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: const InputDecoration(hintText: 'Başlık'),
                 ),
                 const SizedBox(height: 14),
                 TextField(
                   controller: descC,
                   maxLines: 3,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: const InputDecoration(hintText: 'Açıklama'),
                 ),
                 const SizedBox(height: 14),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: AppColors.surf(context),
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.surfaceLight),
+                    border: Border.all(color: AppColors.surfLight(context)),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: selectedCategory,
                       isExpanded: true,
-                      dropdownColor: AppColors.surface,
-                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                      dropdownColor: AppColors.surf(context),
+                      style: TextStyle(color: AppColors.txt(context), fontSize: 16),
                       items: _categories
                           .map((c) => DropdownMenuItem(
                                 value: c,
@@ -111,19 +111,19 @@ class _AdminAnnouncementsScreenState extends State<AdminAnnouncementsScreen> {
                   },
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(18),
+                    padding: EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
+                      color: AppColors.surf(context),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: AppColors.surfaceLight),
+                      border: Border.all(color: AppColors.surfLight(context)),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.calendar_today, color: AppColors.textHint, size: 18),
+                        Icon(Icons.calendar_today, color: AppColors.txtHint(context), size: 18),
                         const SizedBox(width: 12),
                         Text(
                           DateFormat('dd MMMM yyyy', 'tr').format(selectedDate),
-                          style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                          style: TextStyle(color: AppColors.txt(context), fontSize: 16),
                         ),
                       ],
                     ),
@@ -131,7 +131,7 @@ class _AdminAnnouncementsScreenState extends State<AdminAnnouncementsScreen> {
                 ),
                 const SizedBox(height: 8),
                 SwitchListTile(
-                  title: const Text('Aktif', style: TextStyle(color: AppColors.textPrimary)),
+                  title: Text('Aktif', style: TextStyle(color: AppColors.txt(context))),
                   value: isActive,
                   activeTrackColor: AppColors.success,
                   contentPadding: EdgeInsets.zero,
@@ -172,7 +172,7 @@ class _AdminAnnouncementsScreenState extends State<AdminAnnouncementsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: const Text('Duyuru & Etkinlik')),
       body: StreamBuilder<List<Announcement>>(
         stream: _firestore.streamAnnouncements(),
@@ -182,8 +182,8 @@ class _AdminAnnouncementsScreenState extends State<AdminAnnouncementsScreen> {
           }
           final items = snapshot.data ?? [];
           if (items.isEmpty) {
-            return const Center(
-              child: Text('Henüz duyuru yok', style: TextStyle(color: AppColors.textSecondary)),
+            return Center(
+              child: Text('Henüz duyuru yok', style: TextStyle(color: AppColors.txtSec(context))),
             );
           }
           return ListView.builder(
@@ -193,9 +193,9 @@ class _AdminAnnouncementsScreenState extends State<AdminAnnouncementsScreen> {
               final item = items[index];
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.card,
+                  color: AppColors.cardBg(context),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Column(
@@ -234,19 +234,19 @@ class _AdminAnnouncementsScreenState extends State<AdminAnnouncementsScreen> {
                         const Spacer(),
                         Text(
                           DateFormat('dd/MM/yyyy').format(item.date),
-                          style: const TextStyle(color: AppColors.textHint, fontSize: 12),
+                          style: TextStyle(color: AppColors.txtHint(context), fontSize: 12),
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
-                    Text(item.title, style: const TextStyle(
-                      color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w600,
+                    Text(item.title, style: TextStyle(
+                      color: AppColors.txt(context), fontSize: 16, fontWeight: FontWeight.w600,
                     )),
                     const SizedBox(height: 4),
                     Text(item.description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                      style: TextStyle(color: AppColors.txtSec(context), fontSize: 13),
                     ),
                     const SizedBox(height: 10),
                     Row(

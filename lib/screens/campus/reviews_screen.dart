@@ -43,7 +43,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surf(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -58,16 +58,16 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 child: Container(
                   width: 40, height: 4,
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceLight, borderRadius: BorderRadius.circular(2),
+                    color: AppColors.surfLight(context), borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               Text(
                 '${widget.targetName} için yorum',
-                style: const TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.w700),
+                style: TextStyle(color: AppColors.txt(context), fontSize: 20, fontWeight: FontWeight.w700),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Center(
                 child: RatingBar.builder(
                   initialRating: rating,
@@ -76,7 +76,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                   allowHalfRating: true,
                   itemCount: 5,
                   itemSize: 36,
-                  unratedColor: AppColors.surfaceLight,
+                  unratedColor: AppColors.surfLight(context),
                   itemBuilder: (context, _) => const Icon(Icons.star, color: AppColors.warning),
                   onRatingUpdate: (r) => setModalState(() => rating = r),
                 ),
@@ -85,7 +85,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               TextField(
                 controller: commentC,
                 maxLines: 4,
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: AppColors.txt(context)),
                 decoration: const InputDecoration(hintText: 'Yorumun... (anonim olarak paylaşılır)'),
               ),
               const SizedBox(height: 20),
@@ -120,7 +120,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: Text('${widget.targetName} Yorumları')),
       body: StreamBuilder<List<Review>>(
         stream: _firestore.streamReviews(widget.targetId),
@@ -134,11 +134,11 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.rate_review, size: 64, color: AppColors.textHint.withValues(alpha: 0.5)),
+                  Icon(Icons.rate_review, size: 64, color: AppColors.txtHint(context).withValues(alpha: 0.5)),
                   const SizedBox(height: 16),
-                  const Text('Henüz yorum yok', style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+                  Text('Henüz yorum yok', style: TextStyle(color: AppColors.txtSec(context), fontSize: 16)),
                   const SizedBox(height: 8),
-                  const Text('İlk yorumu sen yaz!', style: TextStyle(color: AppColors.textHint, fontSize: 14)),
+                  Text('İlk yorumu sen yaz!', style: TextStyle(color: AppColors.txtHint(context), fontSize: 14)),
                 ],
               ),
             );
@@ -150,9 +150,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               final review = reviews[index];
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(18),
+                padding: EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: AppColors.card,
+                  color: AppColors.cardBg(context),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Column(
@@ -171,8 +171,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        const Text('Anonim', style: TextStyle(
-                          color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w600,
+                        Text('Anonim', style: TextStyle(
+                          color: AppColors.txt(context), fontSize: 14, fontWeight: FontWeight.w600,
                         )),
                         const Spacer(),
                         Row(
@@ -186,7 +186,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                     const SizedBox(height: 12),
                     Text(
                       review.comment,
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.5),
+                      style: TextStyle(color: AppColors.txtSec(context), fontSize: 14, height: 1.5),
                     ),
                   ],
                 ),

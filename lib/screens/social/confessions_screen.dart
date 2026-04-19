@@ -68,7 +68,7 @@ class _ConfessionsScreenState extends State<ConfessionsScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: Text(l.confessionsTitle)),
       body: Column(
         children: [
@@ -83,9 +83,9 @@ class _ConfessionsScreenState extends State<ConfessionsScreen> {
   Widget _buildInputArea(AppLocalizations l) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: AppColors.card,
-        border: Border(bottom: BorderSide(color: AppColors.divider)),
+      decoration: BoxDecoration(
+        color: AppColors.cardBg(context),
+        border: Border(bottom: BorderSide(color: AppColors.div(context))),
       ),
       child: Row(
         children: [
@@ -95,12 +95,12 @@ class _ConfessionsScreenState extends State<ConfessionsScreen> {
               maxLines: 3,
               minLines: 1,
               maxLength: 500,
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: AppColors.txt(context)),
               decoration: InputDecoration(
                 hintText: l.writeConfession,
                 counterText: '',
                 filled: true,
-                fillColor: AppColors.surface,
+                fillColor: AppColors.surf(context),
               ),
             ),
           ),
@@ -177,13 +177,13 @@ class _ConfessionsScreenState extends State<ConfessionsScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.chat_bubble_outline, size: 64,
-              color: AppColors.textHint.withValues(alpha: 0.5)),
+              color: AppColors.txtHint(context).withValues(alpha: 0.5)),
           const SizedBox(height: 16),
           Text(l.noConfessions,
-              style: const TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+              style: TextStyle(color: AppColors.txtSec(context), fontSize: 16)),
           const SizedBox(height: 8),
           Text(l.confessionHint,
-              style: const TextStyle(color: AppColors.textHint, fontSize: 14)),
+              style: TextStyle(color: AppColors.txtHint(context), fontSize: 14)),
         ],
       ),
     );
@@ -207,9 +207,9 @@ class _ConfessionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -228,22 +228,22 @@ class _ConfessionCard extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(l.anonymous,
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
+                  style: TextStyle(
+                    color: AppColors.txtSec(context),
                     fontWeight: FontWeight.w600,
                   )),
               const Spacer(),
               if (confession.createdAt != null)
                 Text(
                   timeago.format(confession.createdAt!, locale: 'tr'),
-                  style: const TextStyle(color: AppColors.textHint, fontSize: 12),
+                  style: TextStyle(color: AppColors.txtHint(context), fontSize: 12),
                 ),
             ],
           ),
           const SizedBox(height: 14),
           Text(
             confession.content,
-            style: const TextStyle(color: AppColors.textPrimary, fontSize: 15, height: 1.5),
+            style: TextStyle(color: AppColors.txt(context), fontSize: 15, height: 1.5),
           ),
           const SizedBox(height: 14),
           Row(
@@ -256,7 +256,7 @@ class _ConfessionCard extends StatelessWidget {
                     const SizedBox(width: 6),
                     Text(
                       '${confession.likes}',
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                      style: TextStyle(color: AppColors.txtSec(context), fontSize: 14),
                     ),
                   ],
                 ),
@@ -266,10 +266,10 @@ class _ConfessionCard extends StatelessWidget {
                 onTap: onReport,
                 child: Row(
                   children: [
-                    const Icon(Icons.flag_outlined, size: 18, color: AppColors.textHint),
+                    Icon(Icons.flag_outlined, size: 18, color: AppColors.txtHint(context)),
                     const SizedBox(width: 4),
                     Text(l.report,
-                        style: const TextStyle(color: AppColors.textHint, fontSize: 12)),
+                        style: TextStyle(color: AppColors.txtHint(context), fontSize: 12)),
                   ],
                 ),
               ),

@@ -21,7 +21,7 @@ class _AdminRingScheduleScreenState extends State<AdminRingScheduleScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surf(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -35,32 +35,32 @@ class _AdminRingScheduleScreenState extends State<AdminRingScheduleScreen> {
               child: Container(
                 width: 40, height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceLight, borderRadius: BorderRadius.circular(2),
+                  color: AppColors.surfLight(context), borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
             const SizedBox(height: 20),
             Text(
               item == null ? 'Ders Saati Ekle' : 'Düzenle',
-              style: const TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.w700),
+              style: TextStyle(color: AppColors.txt(context), fontSize: 22, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 24),
             TextField(
               controller: periodC,
               keyboardType: TextInputType.number,
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: AppColors.txt(context)),
               decoration: const InputDecoration(hintText: 'Ders No (ör: 1)'),
             ),
             const SizedBox(height: 14),
             TextField(
               controller: startC,
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: AppColors.txt(context)),
               decoration: const InputDecoration(hintText: 'Başlangıç (ör: 08:40)'),
             ),
             const SizedBox(height: 14),
             TextField(
               controller: endC,
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: AppColors.txt(context)),
               decoration: const InputDecoration(hintText: 'Bitiş (ör: 09:30)'),
             ),
             const SizedBox(height: 24),
@@ -92,7 +92,7 @@ class _AdminRingScheduleScreenState extends State<AdminRingScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: const Text('Ring Saatleri')),
       body: StreamBuilder<List<RingSchedule>>(
         stream: _firestore.streamRingSchedule(),
@@ -102,8 +102,8 @@ class _AdminRingScheduleScreenState extends State<AdminRingScheduleScreen> {
           }
           final items = snapshot.data ?? [];
           if (items.isEmpty) {
-            return const Center(
-              child: Text('Henüz ders saati eklenmedi', style: TextStyle(color: AppColors.textSecondary)),
+            return Center(
+              child: Text('Henüz ders saati eklenmedi', style: TextStyle(color: AppColors.txtSec(context))),
             );
           }
           return ListView.builder(
@@ -113,9 +113,9 @@ class _AdminRingScheduleScreenState extends State<AdminRingScheduleScreen> {
               final item = items[index];
               return Container(
                 margin: const EdgeInsets.only(bottom: 10),
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.card,
+                  color: AppColors.cardBg(context),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Row(
@@ -140,11 +140,11 @@ class _AdminRingScheduleScreenState extends State<AdminRingScheduleScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${item.period}. Ders', style: const TextStyle(
-                            color: AppColors.textPrimary, fontSize: 15, fontWeight: FontWeight.w600,
+                          Text('${item.period}. Ders', style: TextStyle(
+                            color: AppColors.txt(context), fontSize: 15, fontWeight: FontWeight.w600,
                           )),
                           Text('${item.startTime} - ${item.endTime}',
-                            style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                            style: TextStyle(color: AppColors.txtSec(context), fontSize: 13)),
                         ],
                       ),
                     ),

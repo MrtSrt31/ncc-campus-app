@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,7 +7,13 @@ class LocaleProvider extends ChangeNotifier {
   Locale _locale;
 
   LocaleProvider(this._prefs)
-      : _locale = Locale(_prefs.getString('locale') ?? 'tr');
+      : _locale = Locale(_prefs.getString('locale') ?? _deviceLocale());
+
+  /// Returns 'tr' if device language is Turkish, otherwise 'en'.
+  static String _deviceLocale() {
+    final deviceLang = ui.PlatformDispatcher.instance.locale.languageCode;
+    return deviceLang == 'tr' ? 'tr' : 'en';
+  }
 
   Locale get locale => _locale;
   bool get isTr => _locale.languageCode == 'tr';

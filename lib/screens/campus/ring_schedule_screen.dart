@@ -11,7 +11,7 @@ class RingScheduleScreen extends StatelessWidget {
     final firestore = FirestoreService();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: const Text('Ring Saatleri')),
       body: StreamBuilder<List<RingSchedule>>(
         stream: firestore.streamRingSchedule(),
@@ -25,10 +25,10 @@ class RingScheduleScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.schedule, size: 64, color: AppColors.textHint.withValues(alpha: 0.5)),
+                  Icon(Icons.schedule, size: 64, color: AppColors.txtHint(context).withValues(alpha: 0.5)),
                   const SizedBox(height: 16),
-                  const Text('Ring saatleri henüz eklenmedi',
-                    style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+                  Text('Ring saatleri henüz eklenmedi',
+                    style: TextStyle(color: AppColors.txtSec(context), fontSize: 16)),
                 ],
               ),
             );
@@ -41,9 +41,9 @@ class RingScheduleScreen extends StatelessWidget {
               final isEven = index % 2 == 0;
               return Container(
                 margin: const EdgeInsets.only(bottom: 10),
-                padding: const EdgeInsets.all(18),
+                padding: EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: AppColors.card,
+                  color: AppColors.cardBg(context),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: (isEven ? AppColors.primary : AppColors.accent).withValues(alpha: 0.15),
@@ -75,18 +75,18 @@ class RingScheduleScreen extends StatelessWidget {
                         children: [
                           Text(
                             '${item.period}. Ders',
-                            style: const TextStyle(
-                              color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w600,
+                            style: TextStyle(
+                              color: AppColors.txt(context), fontSize: 16, fontWeight: FontWeight.w600,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              const Icon(Icons.access_time, color: AppColors.textHint, size: 14),
+                              Icon(Icons.access_time, color: AppColors.txtHint(context), size: 14),
                               const SizedBox(width: 4),
                               Text(
                                 '${item.startTime} - ${item.endTime}',
-                                style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                                style: TextStyle(color: AppColors.txtSec(context), fontSize: 14),
                               ),
                             ],
                           ),

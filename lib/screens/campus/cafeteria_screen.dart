@@ -14,7 +14,7 @@ class CafeteriaScreen extends StatelessWidget {
     final l = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: Text(l.cafeteriaMenu)),
       body: StreamBuilder<List<CafeteriaMenu>>(
         stream: firestore.streamCafeteriaMenu(),
@@ -28,10 +28,10 @@ class CafeteriaScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.restaurant, size: 64, color: AppColors.textHint.withValues(alpha: 0.5)),
+                  Icon(Icons.restaurant, size: 64, color: AppColors.txtHint(context).withValues(alpha: 0.5)),
                   const SizedBox(height: 16),
                   Text(l.noMenuYet,
-                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+                    style: TextStyle(color: AppColors.txtSec(context), fontSize: 16)),
                 ],
               ),
             );
@@ -44,9 +44,9 @@ class CafeteriaScreen extends StatelessWidget {
               final isToday = _isToday(item.date);
               return Container(
                 margin: const EdgeInsets.only(bottom: 14),
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: AppColors.card,
+                  color: AppColors.cardBg(context),
                   borderRadius: BorderRadius.circular(16),
                   border: isToday
                       ? Border.all(color: AppColors.primary.withValues(alpha: 0.4), width: 1.5)
@@ -59,8 +59,8 @@ class CafeteriaScreen extends StatelessWidget {
                       children: [
                         Text(
                           DateFormat('dd MMMM yyyy', l.isTr ? 'tr' : 'en').format(item.date),
-                          style: const TextStyle(
-                            color: AppColors.textPrimary, fontSize: 17, fontWeight: FontWeight.w700,
+                          style: TextStyle(
+                            color: AppColors.txt(context), fontSize: 17, fontWeight: FontWeight.w700,
                           ),
                         ),
                         if (isToday) ...[
@@ -81,13 +81,13 @@ class CafeteriaScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     if (item.soup.isNotEmpty)
-                      _buildRow('🥣', l.soup, item.soup),
+                      _buildRow(context, '🥣', l.soup, item.soup),
                     if (item.mainCourse.isNotEmpty)
-                      _buildRow('🍖', l.mainCourseName, item.mainCourse),
+                      _buildRow(context, '🍖', l.mainCourseName, item.mainCourse),
                     if (item.sideDish.isNotEmpty)
-                      _buildRow('🥗', l.sideDish, item.sideDish),
+                      _buildRow(context, '🥗', l.sideDish, item.sideDish),
                     if (item.extra.isNotEmpty)
-                      _buildRow('🍰', l.extra, item.extra),
+                      _buildRow(context, '🍰', l.extra, item.extra),
                   ],
                 ),
               );
@@ -98,7 +98,7 @@ class CafeteriaScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRow(String emoji, String label, List<String> items) {
+  Widget _buildRow(BuildContext context, String emoji, String label, List<String> items) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -110,11 +110,11 @@ class CafeteriaScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: const TextStyle(color: AppColors.textHint, fontSize: 12)),
+                Text(label, style: TextStyle(color: AppColors.txtHint(context), fontSize: 12)),
                 const SizedBox(height: 2),
                 Text(
                   items.join(', '),
-                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
+                  style: TextStyle(color: AppColors.txt(context), fontSize: 15),
                 ),
               ],
             ),

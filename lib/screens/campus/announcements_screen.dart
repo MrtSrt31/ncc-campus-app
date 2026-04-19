@@ -13,7 +13,7 @@ class AnnouncementsScreen extends StatelessWidget {
     final firestore = FirestoreService();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: const Text('Bugün Kampüste')),
       body: Column(
         children: [
@@ -31,10 +31,10 @@ class AnnouncementsScreen extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.event_busy, size: 64, color: AppColors.textHint.withValues(alpha: 0.5)),
+                        Icon(Icons.event_busy, size: 64, color: AppColors.txtHint(context).withValues(alpha: 0.5)),
                         const SizedBox(height: 16),
-                        const Text('Şu an aktif duyuru yok',
-                          style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+                        Text('Şu an aktif duyuru yok',
+                          style: TextStyle(color: AppColors.txtSec(context), fontSize: 16)),
                       ],
                     ),
                   );
@@ -64,9 +64,9 @@ class _AnnouncementCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: _categoryColor.withValues(alpha: 0.2)),
       ),
@@ -96,21 +96,21 @@ class _AnnouncementCard extends StatelessWidget {
               const Spacer(),
               Text(
                 DateFormat('dd MMM', 'tr').format(announcement.date),
-                style: const TextStyle(color: AppColors.textHint, fontSize: 12),
+                style: TextStyle(color: AppColors.txtHint(context), fontSize: 12),
               ),
             ],
           ),
           const SizedBox(height: 14),
           Text(
             announcement.title,
-            style: const TextStyle(
-              color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.w700,
+            style: TextStyle(
+              color: AppColors.txt(context), fontSize: 18, fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             announcement.description,
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.5),
+            style: TextStyle(color: AppColors.txtSec(context), fontSize: 14, height: 1.5),
           ),
         ],
       ),

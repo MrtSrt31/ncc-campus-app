@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/providers/auth_provider.dart';
 import '../../core/providers/ad_provider.dart';
+import '../../core/providers/app_settings_provider.dart';
+import '../../core/providers/exam_provider.dart';
 import '../../core/providers/gpa_provider.dart';
 import '../../core/providers/locale_provider.dart';
 import '../../core/l10n/app_localizations.dart';
@@ -15,10 +17,11 @@ class ProfileScreen extends StatelessWidget {
     final auth = context.watch<AuthProvider>();
     final adProvider = context.watch<AdProvider>();
     final gpa = context.watch<GpaProvider>();
+    final examProvider = context.watch<ExamProvider>();
     final l = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: Text(l.profile)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -47,8 +50,8 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               auth.isLoggedIn ? (auth.displayName ?? 'User') : l.guest,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
+              style: TextStyle(
+                color: AppColors.txt(context),
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
               ),
@@ -57,14 +60,14 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 auth.email!,
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                style: TextStyle(color: AppColors.txtSec(context), fontSize: 14),
               ),
             ],
             if (!auth.isLoggedIn) ...[
               const SizedBox(height: 8),
               Text(
                 l.loginRequired,
-                style: const TextStyle(color: AppColors.textHint, fontSize: 13),
+                style: TextStyle(color: AppColors.txtHint(context), fontSize: 13),
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -76,43 +79,43 @@ class ProfileScreen extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 32),
-            _buildStatCard(gpa, l),
+            _buildStatCard(context, gpa, l),
             const SizedBox(height: 20),
-            _buildSettingsSection(context, auth, adProvider, l),
+            _buildSettingsSection(context, auth, adProvider, examProvider, l),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatCard(GpaProvider gpa, AppLocalizations l) {
+  Widget _buildStatCard(BuildContext context, GpaProvider gpa, AppLocalizations l) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStat('GPA', gpa.currentGpa.toStringAsFixed(2)),
-          Container(width: 1, height: 40, color: AppColors.divider),
-          _buildStat(l.courses, '${gpa.courses.length}'),
-          Container(width: 1, height: 40, color: AppColors.divider),
-          _buildStat(l.credit, gpa.totalCredits.toStringAsFixed(0)),
+          _buildStat(context, 'GPA', gpa.currentGpa.toStringAsFixed(2)),
+          Container(width: 1, height: 40, color: AppColors.div(context)),
+          _buildStat(context, l.courses, '${gpa.courses.length}'),
+          Container(width: 1, height: 40, color: AppColors.div(context)),
+          _buildStat(context, l.credit, gpa.totalCredits.toStringAsFixed(0)),
         ],
       ),
     );
   }
 
-  Widget _buildStat(String label, String value) {
+  Widget _buildStat(BuildContext context, String label, String value) {
     return Column(
       children: [
         Text(
           value,
-          style: const TextStyle(
-            color: AppColors.textPrimary,
+          style: TextStyle(
+            color: AppColors.txt(context),
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
@@ -120,27 +123,34 @@ class ProfileScreen extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+          style: TextStyle(color: AppColors.txtSec(context), fontSize: 13),
         ),
       ],
     );
   }
 
-  Widget _buildSettingsSection(BuildContext context, AuthProvider auth, AdProvider adProvider, AppLocalizations l) {
+  Widget _buildSettingsSection(
+    BuildContext context,
+    AuthProvider auth,
+    AdProvider adProvider,
+    ExamProvider examProvider,
+    AppLocalizations l,
+  ) {
     final localeProvider = context.watch<LocaleProvider>();
+    final settingsProvider = context.watch<AppSettingsProvider>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           l.settings,
-          style: const TextStyle(
-            color: AppColors.textPrimary,
+          style: TextStyle(
+            color: AppColors.txt(context),
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: 14),
-        _buildSettingsTile(
+        _buildSettingsTile(context,
           icon: Icons.language,
           title: l.language,
           subtitle: localeProvider.isTr ? l.turkish : l.english,
@@ -150,8 +160,46 @@ class ProfileScreen extends StatelessWidget {
             onChanged: (_) => localeProvider.toggleLocale(),
           ),
         ),
+        _buildSettingsTile(context,
+          icon: Icons.dark_mode_outlined,
+          title: l.themeMode,
+          subtitle: _themeLabel(settingsProvider.themeMode, l),
+          trailing: DropdownButton<ThemeMode>(
+            value: settingsProvider.themeMode,
+            underline: const SizedBox.shrink(),
+            items: [
+              DropdownMenuItem(
+                value: ThemeMode.system,
+                child: Text(l.themeSystem),
+              ),
+              DropdownMenuItem(
+                value: ThemeMode.light,
+                child: Text(l.themeLight),
+              ),
+              DropdownMenuItem(
+                value: ThemeMode.dark,
+                child: Text(l.themeDark),
+              ),
+            ],
+            onChanged: (mode) {
+              if (mode != null) {
+                settingsProvider.setThemeMode(mode);
+              }
+            },
+          ),
+        ),
+        _buildSettingsTile(context,
+          icon: Icons.notifications_active_outlined,
+          title: l.examNotifications,
+          subtitle: examProvider.notificationsEnabled ? l.active : l.off,
+          trailing: Switch(
+            value: examProvider.notificationsEnabled,
+            activeTrackColor: AppColors.primary,
+            onChanged: (v) => examProvider.setNotificationsEnabled(v),
+          ),
+        ),
         if (auth.isLoggedIn)
-          _buildSettingsTile(
+          _buildSettingsTile(context,
             icon: Icons.campaign,
             title: l.showAds,
             subtitle: adProvider.adsEnabled ? 'Aktif / Active' : 'Kapalı / Off',
@@ -162,21 +210,21 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
         if (auth.isAdmin)
-          _buildSettingsTile(
+          _buildSettingsTile(context,
             icon: Icons.admin_panel_settings,
             title: l.adminPanel,
             subtitle: l.adminPanelSub,
             iconColor: AppColors.error,
             onTap: () => Navigator.pushNamed(context, '/admin'),
           ),
-        _buildSettingsTile(
+        _buildSettingsTile(context,
           icon: Icons.info_outline,
           title: l.isTr ? 'Hakkında' : 'About',
           subtitle: 'NCC Campus v1.0.0',
           onTap: () {},
         ),
         if (auth.isLoggedIn)
-          _buildSettingsTile(
+          _buildSettingsTile(context,
             icon: Icons.logout,
             title: l.logout,
             subtitle: '',
@@ -193,7 +241,18 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsTile({
+  String _themeLabel(ThemeMode mode, AppLocalizations l) {
+    switch (mode) {
+      case ThemeMode.light:
+        return l.themeLight;
+      case ThemeMode.dark:
+        return l.themeDark;
+      case ThemeMode.system:
+        return l.themeSystem;
+    }
+  }
+
+  Widget _buildSettingsTile(BuildContext context, {
     required IconData icon,
     required String title,
     required String subtitle,
@@ -206,15 +265,15 @@ class ProfileScreen extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.card,
+          color: AppColors.cardBg(context),
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
           children: [
-            Icon(icon, color: iconColor ?? AppColors.textSecondary, size: 22),
-            const SizedBox(width: 14),
+            Icon(icon, color: iconColor ?? AppColors.txtSec(context), size: 22),
+            SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,7 +281,7 @@ class ProfileScreen extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      color: titleColor ?? AppColors.textPrimary,
+                      color: titleColor ?? AppColors.txt(context),
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
@@ -230,7 +289,7 @@ class ProfileScreen extends StatelessWidget {
                   if (subtitle.isNotEmpty)
                     Text(
                       subtitle,
-                      style: const TextStyle(color: AppColors.textHint, fontSize: 13),
+                      style: TextStyle(color: AppColors.txtHint(context), fontSize: 13),
                     ),
                 ],
               ),

@@ -24,7 +24,7 @@ class _AdminCafeteriaScreenState extends State<AdminCafeteriaScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surf(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -40,14 +40,14 @@ class _AdminCafeteriaScreenState extends State<AdminCafeteriaScreen> {
                   child: Container(
                     width: 40, height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceLight, borderRadius: BorderRadius.circular(2),
+                      color: AppColors.surfLight(context), borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 Text(
                   item == null ? 'Yeni Menü' : 'Menü Düzenle',
-                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.w700),
+                  style: TextStyle(color: AppColors.txt(context), fontSize: 22, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 24),
                 GestureDetector(
@@ -62,19 +62,19 @@ class _AdminCafeteriaScreenState extends State<AdminCafeteriaScreen> {
                   },
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(18),
+                    padding: EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
+                      color: AppColors.surf(context),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: AppColors.surfaceLight),
+                      border: Border.all(color: AppColors.surfLight(context)),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.calendar_today, color: AppColors.textHint, size: 18),
+                        Icon(Icons.calendar_today, color: AppColors.txtHint(context), size: 18),
                         const SizedBox(width: 12),
                         Text(
                           DateFormat('dd MMMM yyyy', 'tr').format(selectedDate),
-                          style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                          style: TextStyle(color: AppColors.txt(context), fontSize: 16),
                         ),
                       ],
                     ),
@@ -83,25 +83,25 @@ class _AdminCafeteriaScreenState extends State<AdminCafeteriaScreen> {
                 const SizedBox(height: 14),
                 TextField(
                   controller: soupC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: const InputDecoration(hintText: 'Çorba (virgülle ayır)'),
                 ),
                 const SizedBox(height: 14),
                 TextField(
                   controller: mainC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: const InputDecoration(hintText: 'Ana Yemek (virgülle ayır)'),
                 ),
                 const SizedBox(height: 14),
                 TextField(
                   controller: sideC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: const InputDecoration(hintText: 'Yan Yemek (virgülle ayır)'),
                 ),
                 const SizedBox(height: 14),
                 TextField(
                   controller: extraC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: const InputDecoration(hintText: 'Ekstra (virgülle ayır)'),
                 ),
                 const SizedBox(height: 24),
@@ -140,7 +140,7 @@ class _AdminCafeteriaScreenState extends State<AdminCafeteriaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: const Text('Yemekhane Menüsü')),
       body: StreamBuilder<List<CafeteriaMenu>>(
         stream: _firestore.streamCafeteriaMenu(),
@@ -150,8 +150,8 @@ class _AdminCafeteriaScreenState extends State<AdminCafeteriaScreen> {
           }
           final items = snapshot.data ?? [];
           if (items.isEmpty) {
-            return const Center(
-              child: Text('Henüz menü eklenmedi', style: TextStyle(color: AppColors.textSecondary)),
+            return Center(
+              child: Text('Henüz menü eklenmedi', style: TextStyle(color: AppColors.txtSec(context))),
             );
           }
           return ListView.builder(
@@ -161,9 +161,9 @@ class _AdminCafeteriaScreenState extends State<AdminCafeteriaScreen> {
               final item = items[index];
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.card,
+                  color: AppColors.cardBg(context),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Column(
@@ -175,8 +175,8 @@ class _AdminCafeteriaScreenState extends State<AdminCafeteriaScreen> {
                         const SizedBox(width: 8),
                         Text(
                           DateFormat('dd MMMM yyyy', 'tr').format(item.date),
-                          style: const TextStyle(
-                            color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w600,
+                          style: TextStyle(
+                            color: AppColors.txt(context), fontSize: 16, fontWeight: FontWeight.w600,
                           ),
                         ),
                         const Spacer(),
@@ -223,10 +223,10 @@ class _AdminCafeteriaScreenState extends State<AdminCafeteriaScreen> {
         children: [
           SizedBox(
             width: 100,
-            child: Text(label, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+            child: Text(label, style: TextStyle(color: AppColors.txtSec(context), fontSize: 13)),
           ),
           Expanded(
-            child: Text(value, style: const TextStyle(color: AppColors.textPrimary, fontSize: 13)),
+            child: Text(value, style: TextStyle(color: AppColors.txt(context), fontSize: 13)),
           ),
         ],
       ),

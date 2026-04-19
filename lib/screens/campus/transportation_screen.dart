@@ -30,13 +30,13 @@ class TransportationScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.bg(context),
         appBar: AppBar(
           title: Text(l.transportationTitle),
           bottom: TabBar(
             indicatorColor: AppColors.primary,
             labelColor: AppColors.primary,
-            unselectedLabelColor: AppColors.textSecondary,
+            unselectedLabelColor: AppColors.txtSec(context),
             tabs: [
               Tab(text: l.semesterSchedule),
               Tab(text: l.holidaySchedule),
@@ -133,7 +133,7 @@ class _ScheduleTab extends StatelessWidget {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -183,8 +183,8 @@ class _ScheduleTab extends StatelessWidget {
                     color: next
                         ? color.withValues(alpha: 0.2)
                         : past
-                            ? AppColors.surfaceLight.withValues(alpha: 0.5)
-                            : AppColors.surface,
+                            ? AppColors.surfLight(context).withValues(alpha: 0.5)
+                            : AppColors.surf(context),
                     borderRadius: BorderRadius.circular(12),
                     border: next
                         ? Border.all(color: color, width: 1.5)
@@ -194,10 +194,10 @@ class _ScheduleTab extends StatelessWidget {
                     time,
                     style: TextStyle(
                       color: past
-                          ? AppColors.textHint
+                          ? AppColors.txtHint(context)
                           : next
                               ? color
-                              : AppColors.textPrimary,
+                              : AppColors.txt(context),
                       fontSize: 15,
                       fontWeight: next ? FontWeight.w700 : FontWeight.w500,
                       decoration: past ? TextDecoration.lineThrough : null,

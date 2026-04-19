@@ -14,6 +14,7 @@ class ExamProvider extends ChangeNotifier {
   List<Exam> _allExams = [];
   List<ExamScheduleFile> _schedules = [];
   List<String> _selectedCourseCodes = [];
+  bool _notificationsEnabled = true;
   bool _loading = true;
   bool _initialized = false;
 
@@ -26,6 +27,7 @@ class ExamProvider extends ChangeNotifier {
   List<Exam> get allExams => _allExams;
   List<ExamScheduleFile> get schedules => _schedules;
   List<String> get selectedCourseCodes => List.unmodifiable(_selectedCourseCodes);
+  bool get notificationsEnabled => _notificationsEnabled;
   bool get loading => _loading;
 
   List<Exam> get selectedExams {
@@ -90,6 +92,7 @@ class ExamProvider extends ChangeNotifier {
 
   void _loadSelectedCourses() {
     _selectedCourseCodes = _prefs.getStringList('selectedExamCourses') ?? [];
+    _notificationsEnabled = _prefs.getBool('examNotificationsEnabled') ?? true;
   }
 
   Future<void> _saveSelectedCourses() async {
@@ -121,10 +124,23 @@ class ExamProvider extends ChangeNotifier {
 
   Future<void> _rescheduleNotifications() async {
     try {
+      if (!_notificationsEnabled) {
+        await NotificationService.cancelAllExamNotifications();
+        return;
+      }
+      await NotificationService.initialize();
       await NotificationService.scheduleExamNotifications(selectedExams);
     } catch (e) {
       debugPrint('Notification scheduling error: $e');
     }
+  }
+
+  Future<void> setNotificationsEnabled(bool enabled) async {
+    if (_notificationsEnabled == enabled) return;
+    _notificationsEnabled = enabled;
+    await _prefs.setBool('examNotificationsEnabled', enabled);
+    await _rescheduleNotifications();
+    notifyListeners();
   }
 
   // ── ICS Export ─────────────────────────────────────────

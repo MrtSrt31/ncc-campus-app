@@ -11,7 +11,7 @@ class AdminUsersScreen extends StatelessWidget {
     final firestore = FirestoreService();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: const Text('Kullanıcılar')),
       body: StreamBuilder<List<AppUser>>(
         stream: firestore.streamAllUsers(),
@@ -21,8 +21,8 @@ class AdminUsersScreen extends StatelessWidget {
           }
           final users = snapshot.data ?? [];
           if (users.isEmpty) {
-            return const Center(
-              child: Text('Henüz kullanıcı yok', style: TextStyle(color: AppColors.textSecondary)),
+            return Center(
+              child: Text('Henüz kullanıcı yok', style: TextStyle(color: AppColors.txtSec(context))),
             );
           }
           return ListView.builder(
@@ -32,9 +32,9 @@ class AdminUsersScreen extends StatelessWidget {
               final user = users[index];
               return Container(
                 margin: const EdgeInsets.only(bottom: 10),
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.card,
+                  color: AppColors.cardBg(context),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Row(
@@ -42,14 +42,14 @@ class AdminUsersScreen extends StatelessWidget {
                     Container(
                       width: 44, height: 44,
                       decoration: BoxDecoration(
-                        color: _roleColor(user.role).withValues(alpha: 0.15),
+                        color: _roleColor(context, user.role).withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
                         child: Text(
                           user.displayName.isNotEmpty ? user.displayName[0].toUpperCase() : '?',
                           style: TextStyle(
-                            color: _roleColor(user.role), fontSize: 18, fontWeight: FontWeight.w700,
+                            color: _roleColor(context, user.role), fontSize: 18, fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -59,19 +59,19 @@ class AdminUsersScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(user.displayName, style: const TextStyle(
-                            color: AppColors.textPrimary, fontSize: 15, fontWeight: FontWeight.w600,
+                          Text(user.displayName, style: TextStyle(
+                            color: AppColors.txt(context), fontSize: 15, fontWeight: FontWeight.w600,
                           )),
-                          Text(user.email, style: const TextStyle(color: AppColors.textHint, fontSize: 12)),
+                          Text(user.email, style: TextStyle(color: AppColors.txtHint(context), fontSize: 12)),
                         ],
                       ),
                     ),
                     PopupMenuButton<String>(
-                      icon: const Icon(Icons.more_vert, color: AppColors.textHint, size: 20),
-                      color: AppColors.surface,
+                      icon: Icon(Icons.more_vert, color: AppColors.txtHint(context), size: 20),
+                      color: AppColors.surf(context),
                       itemBuilder: (_) => [
-                        const PopupMenuItem(value: 'admin', child: Text('Admin Yap', style: TextStyle(color: AppColors.textPrimary))),
-                        const PopupMenuItem(value: 'user', child: Text('Kullanıcı Yap', style: TextStyle(color: AppColors.textPrimary))),
+                        PopupMenuItem(value: 'admin', child: Text('Admin Yap', style: TextStyle(color: AppColors.txt(context)))),
+                        PopupMenuItem(value: 'user', child: Text('Kullanıcı Yap', style: TextStyle(color: AppColors.txt(context)))),
                       ],
                       onSelected: (role) {
                         firestore.updateUser(user.uid, {'role': role});
@@ -80,13 +80,13 @@ class AdminUsersScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: _roleColor(user.role).withValues(alpha: 0.15),
+                        color: _roleColor(context, user.role).withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         _roleLabel(user.role),
                         style: TextStyle(
-                          color: _roleColor(user.role), fontSize: 11, fontWeight: FontWeight.w600,
+                          color: _roleColor(context, user.role), fontSize: 11, fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -100,14 +100,14 @@ class AdminUsersScreen extends StatelessWidget {
     );
   }
 
-  Color _roleColor(String role) {
+  Color _roleColor(BuildContext context, String role) {
     switch (role) {
       case 'admin':
         return AppColors.error;
       case 'user':
         return AppColors.primary;
       default:
-        return AppColors.textHint;
+        return AppColors.txtHint(context);
     }
   }
 

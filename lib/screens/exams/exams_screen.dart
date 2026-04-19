@@ -35,7 +35,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
     final provider = context.watch<ExamProvider>();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(
         title: Text(l.examsTitle),
         actions: [
@@ -68,16 +68,16 @@ class _ExamsScreenState extends State<ExamsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.event_busy, color: AppColors.textHint, size: 64),
+              Icon(Icons.event_busy, color: AppColors.txtHint(context), size: 64),
               const SizedBox(height: 16),
               Text(l.noExamSchedule,
-                  style: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 16)),
+                  style: TextStyle(
+                      color: AppColors.txtSec(context), fontSize: 16)),
               const SizedBox(height: 8),
               Text(l.noExamScheduleHint,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      color: AppColors.textHint, fontSize: 13)),
+                  style: TextStyle(
+                      color: AppColors.txtHint(context), fontSize: 13)),
             ],
           ),
         ),
@@ -91,12 +91,12 @@ class _ExamsScreenState extends State<ExamsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.school_outlined,
-                  color: AppColors.textHint, size: 64),
+              Icon(Icons.school_outlined,
+                  color: AppColors.txtHint(context), size: 64),
               const SizedBox(height: 16),
               Text(l.selectCoursesPrompt,
-                  style: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 16)),
+                  style: TextStyle(
+                      color: AppColors.txtSec(context), fontSize: 16)),
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () => _showCourseSelection(context, provider),
@@ -136,9 +136,9 @@ class _ExamsScreenState extends State<ExamsScreen> {
         children: [
           // Calendar
           Container(
-            margin: const EdgeInsets.only(top: 8),
+            margin: EdgeInsets.only(top: 8),
             decoration: BoxDecoration(
-              color: AppColors.card,
+              color: AppColors.cardBg(context),
               borderRadius: BorderRadius.circular(16),
             ),
             child: TableCalendar<Exam>(
@@ -166,9 +166,9 @@ class _ExamsScreenState extends State<ExamsScreen> {
               calendarStyle: CalendarStyle(
                 outsideDaysVisible: false,
                 defaultTextStyle:
-                    const TextStyle(color: AppColors.textPrimary),
+                    TextStyle(color: AppColors.txt(context)),
                 weekendTextStyle:
-                    const TextStyle(color: AppColors.textSecondary),
+                    TextStyle(color: AppColors.txtSec(context)),
                 todayDecoration: BoxDecoration(
                   color: AppColors.primary.withValues(alpha: 0.3),
                   shape: BoxShape.circle,
@@ -184,23 +184,23 @@ class _ExamsScreenState extends State<ExamsScreen> {
                 markerSize: 6,
                 markersMaxCount: 3,
               ),
-              headerStyle: const HeaderStyle(
+              headerStyle: HeaderStyle(
                 formatButtonVisible: false,
                 titleCentered: true,
                 titleTextStyle: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: AppColors.txt(context),
                     fontSize: 16,
                     fontWeight: FontWeight.w600),
                 leftChevronIcon:
-                    Icon(Icons.chevron_left, color: AppColors.textPrimary),
+                    Icon(Icons.chevron_left, color: AppColors.txt(context)),
                 rightChevronIcon:
-                    Icon(Icons.chevron_right, color: AppColors.textPrimary),
+                    Icon(Icons.chevron_right, color: AppColors.txt(context)),
               ),
-              daysOfWeekStyle: const DaysOfWeekStyle(
+              daysOfWeekStyle: DaysOfWeekStyle(
                 weekdayStyle: TextStyle(
-                    color: AppColors.textHint, fontWeight: FontWeight.w600),
+                    color: AppColors.txtHint(context), fontWeight: FontWeight.w600),
                 weekendStyle: TextStyle(
-                    color: AppColors.textHint, fontWeight: FontWeight.w600),
+                    color: AppColors.txtHint(context), fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -241,8 +241,8 @@ class _ExamsScreenState extends State<ExamsScreen> {
               DateFormat('d MMMM yyyy, EEEE',
                       AppLocalizations.of(context).isTr ? 'tr' : 'en')
                   .format(_selectedDay!),
-              style: const TextStyle(
-                color: AppColors.textPrimary,
+              style: TextStyle(
+                color: AppColors.txt(context),
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -254,16 +254,16 @@ class _ExamsScreenState extends State<ExamsScreen> {
           if (dayExams.isEmpty)
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: AppColors.card,
+                color: AppColors.cardBg(context),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
                 l.noExamsOnDay,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: AppColors.textHint, fontSize: 14),
+                style: TextStyle(
+                    color: AppColors.txtHint(context), fontSize: 14),
               ),
             )
           else
@@ -276,8 +276,8 @@ class _ExamsScreenState extends State<ExamsScreen> {
           const SizedBox(height: 24),
           Text(
             l.upcomingExams,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
+            style: TextStyle(
+              color: AppColors.txt(context),
               fontSize: 18,
               fontWeight: FontWeight.w700,
             ),
@@ -286,16 +286,16 @@ class _ExamsScreenState extends State<ExamsScreen> {
           if (provider.upcomingExams.isEmpty)
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: AppColors.card,
+                color: AppColors.cardBg(context),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
                 l.noUpcomingExams,
                 textAlign: TextAlign.center,
                 style:
-                    const TextStyle(color: AppColors.textHint, fontSize: 14),
+                    TextStyle(color: AppColors.txtHint(context), fontSize: 14),
               ),
             )
           else
@@ -320,7 +320,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surf(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -339,7 +339,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
             minChildSize: 0.4,
             expand: false,
             builder: (_, scrollController) => Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -349,7 +349,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: AppColors.textHint,
+                        color: AppColors.txtHint(context),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -357,8 +357,8 @@ class _ExamsScreenState extends State<ExamsScreen> {
                   const SizedBox(height: 16),
                   Text(
                     l.selectCourses,
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
+                    style: TextStyle(
+                      color: AppColors.txt(context),
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                     ),
@@ -368,10 +368,10 @@ class _ExamsScreenState extends State<ExamsScreen> {
                   TextField(
                     decoration: InputDecoration(
                       hintText: l.searchCourse,
-                      prefixIcon: const Icon(Icons.search,
-                          color: AppColors.textHint),
+                      prefixIcon: Icon(Icons.search,
+                          color: AppColors.txtHint(context)),
                       filled: true,
-                      fillColor: AppColors.card,
+                      fillColor: AppColors.cardBg(context),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -380,7 +380,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
                           horizontal: 16, vertical: 12),
                     ),
                     style:
-                        const TextStyle(color: AppColors.textPrimary),
+                        TextStyle(color: AppColors.txt(context)),
                     onChanged: (v) =>
                         setSheetState(() => searchQuery = v),
                   ),
@@ -407,8 +407,8 @@ class _ExamsScreenState extends State<ExamsScreen> {
                       const Spacer(),
                       Text(
                         '${selected.length} ${l.selected}',
-                        style: const TextStyle(
-                            color: AppColors.textHint, fontSize: 13),
+                        style: TextStyle(
+                            color: AppColors.txtHint(context), fontSize: 13),
                       ),
                     ],
                   ),
@@ -418,8 +418,8 @@ class _ExamsScreenState extends State<ExamsScreen> {
                     child: filtered.isEmpty
                         ? Center(
                             child: Text(l.noCourseFound,
-                                style: const TextStyle(
-                                    color: AppColors.textHint)))
+                                style: TextStyle(
+                                    color: AppColors.txtHint(context))))
                         : ListView.builder(
                             controller: scrollController,
                             itemCount: filtered.length,
@@ -429,9 +429,9 @@ class _ExamsScreenState extends State<ExamsScreen> {
                                   selected.contains(code);
                               return CheckboxListTile(
                                 title: Text(code,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         color:
-                                            AppColors.textPrimary,
+                                            AppColors.txt(context),
                                         fontSize: 15)),
                                 value: isSelected,
                                 activeColor: AppColors.primary,
@@ -494,9 +494,9 @@ class _ExamCard extends StatelessWidget {
     final l = AppLocalizations.of(context);
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
       ),
@@ -525,8 +525,8 @@ class _ExamCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   exam.courseCode,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
+                  style: TextStyle(
+                    color: AppColors.txt(context),
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),
@@ -550,43 +550,43 @@ class _ExamCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               exam.courseName,
-              style: const TextStyle(
-                  color: AppColors.textSecondary, fontSize: 13),
+              style: TextStyle(
+                  color: AppColors.txtSec(context), fontSize: 13),
             ),
           ],
           const SizedBox(height: 10),
           Row(
             children: [
               if (showDate) ...[
-                const Icon(Icons.calendar_today,
-                    color: AppColors.textHint, size: 14),
+                Icon(Icons.calendar_today,
+                    color: AppColors.txtHint(context), size: 14),
                 const SizedBox(width: 4),
                 Text(
                   DateFormat('d MMM yyyy',
                           AppLocalizations.of(context).isTr ? 'tr' : 'en')
                       .format(exam.date),
-                  style: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 13),
+                  style: TextStyle(
+                      color: AppColors.txtSec(context), fontSize: 13),
                 ),
                 const SizedBox(width: 16),
               ],
-              const Icon(Icons.access_time,
-                  color: AppColors.textHint, size: 14),
+              Icon(Icons.access_time,
+                  color: AppColors.txtHint(context), size: 14),
               const SizedBox(width: 4),
               Text(
                 '${exam.startTime} - ${exam.endTime}',
-                style: const TextStyle(
-                    color: AppColors.textSecondary, fontSize: 13),
+                style: TextStyle(
+                    color: AppColors.txtSec(context), fontSize: 13),
               ),
               if (exam.locationString.isNotEmpty) ...[
                 const SizedBox(width: 16),
-                const Icon(Icons.location_on_outlined,
-                    color: AppColors.textHint, size: 14),
+                Icon(Icons.location_on_outlined,
+                    color: AppColors.txtHint(context), size: 14),
                 const SizedBox(width: 4),
                 Text(
                   exam.locationString,
-                  style: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 13),
+                  style: TextStyle(
+                      color: AppColors.txtSec(context), fontSize: 13),
                 ),
               ],
             ],

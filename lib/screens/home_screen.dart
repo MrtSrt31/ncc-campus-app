@@ -32,8 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: AppColors.divider, width: 0.5)),
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.div(context), width: 0.5)),
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
@@ -75,7 +75,7 @@ class _HomePage extends StatelessWidget {
     final l = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -102,8 +102,8 @@ class _HomePage extends StatelessWidget {
                                   auth.isLoggedIn
                                       ? l.greeting(auth.displayName ?? '')
                                       : l.greetingGuest,
-                                  style: const TextStyle(
-                                    color: AppColors.textPrimary,
+                                  style: TextStyle(
+                                    color: AppColors.txt(context),
                                     fontSize: 26,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -111,7 +111,7 @@ class _HomePage extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           l.welcomeSubtitle,
-                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                          style: TextStyle(color: AppColors.txtSec(context), fontSize: 14),
                         ),
                       ],
                     ),
@@ -144,8 +144,8 @@ class _HomePage extends StatelessWidget {
               const SizedBox(height: 20),
               Text(
                 l.quickAccess,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
+                style: TextStyle(
+                  color: AppColors.txt(context),
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
@@ -237,20 +237,22 @@ class _HomePage extends StatelessWidget {
               const SizedBox(height: 32),
               Text(
                 l.comingSoon,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
+                style: TextStyle(
+                  color: AppColors.txt(context),
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 16),
               _buildComingSoonCard(
+                context,
                 Icons.smart_toy,
                 l.aiAssistant,
                 l.aiAssistantSub,
                 l,
               ),
               _buildComingSoonCard(
+                context,
                 Icons.map,
                 l.campusMap,
                 l.campusMapSub,
@@ -288,12 +290,12 @@ class _HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildComingSoonCard(IconData icon, String title, String subtitle, AppLocalizations l) {
+  Widget _buildComingSoonCard(BuildContext context, IconData icon, String title, String subtitle, AppLocalizations l) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -302,10 +304,10 @@ class _HomePage extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: AppColors.surfaceLight,
+              color: AppColors.surfLight(context),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Icon(icon, color: AppColors.textHint, size: 24),
+            child: Icon(icon, color: AppColors.txtHint(context), size: 24),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -314,8 +316,8 @@ class _HomePage extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
+                  style: TextStyle(
+                    color: AppColors.txtSec(context),
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
@@ -323,7 +325,7 @@ class _HomePage extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(color: AppColors.textHint, fontSize: 13),
+                  style: TextStyle(color: AppColors.txtHint(context), fontSize: 13),
                 ),
               ],
             ),

@@ -65,7 +65,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surf(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -79,50 +79,50 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               children: [
                 Center(
                   child: Container(width: 40, height: 4,
-                    decoration: BoxDecoration(color: AppColors.surfaceLight, borderRadius: BorderRadius.circular(2))),
+                    decoration: BoxDecoration(color: AppColors.surfLight(context), borderRadius: BorderRadius.circular(2))),
                 ),
                 const SizedBox(height: 20),
-                Text(l.addListing, style: const TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.w700)),
+                Text(l.addListing, style: TextStyle(color: AppColors.txt(context), fontSize: 22, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 20),
                 TextField(
                   controller: titleC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(hintText: l.title),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: descC,
                   maxLines: 3,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(hintText: l.description),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: priceC,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(hintText: '${l.price} (₺)'),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: contactC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(hintText: l.contact),
                 ),
                 const SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: AppColors.surf(context),
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.surfaceLight),
+                    border: Border.all(color: AppColors.surfLight(context)),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: cat,
                       isExpanded: true,
-                      dropdownColor: AppColors.surface,
-                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                      dropdownColor: AppColors.surf(context),
+                      style: TextStyle(color: AppColors.txt(context), fontSize: 16),
                       items: _categories.where((c) => c != 'all').map((c) =>
                         DropdownMenuItem(value: c, child: Text(_categoryLabel(c, l)))).toList(),
                       onChanged: (v) => setModalState(() => cat = v!),
@@ -170,7 +170,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: Text(l.marketplaceTitle)),
       body: Column(
         children: [
@@ -203,16 +203,16 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
             child: GestureDetector(
               onTap: () => setState(() => _selectedCategory = cat),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: selected ? AppColors.primary : AppColors.card,
+                  color: selected ? AppColors.primary : AppColors.cardBg(context),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 alignment: Alignment.center,
                 child: Text(
                   _categoryLabel(cat, l),
                   style: TextStyle(
-                    color: selected ? Colors.white : AppColors.textSecondary,
+                    color: selected ? Colors.white : AppColors.txtSec(context),
                     fontWeight: FontWeight.w600,
                     fontSize: 13,
                   ),
@@ -267,11 +267,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.storefront, size: 64, color: AppColors.textHint.withValues(alpha: 0.5)),
+          Icon(Icons.storefront, size: 64, color: AppColors.txtHint(context).withValues(alpha: 0.5)),
           const SizedBox(height: 16),
-          Text(l.noListings, style: const TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+          Text(l.noListings, style: TextStyle(color: AppColors.txtSec(context), fontSize: 16)),
           const SizedBox(height: 8),
-          Text(l.listingHint, style: const TextStyle(color: AppColors.textHint, fontSize: 14)),
+          Text(l.listingHint, style: TextStyle(color: AppColors.txtHint(context), fontSize: 14)),
         ],
       ),
     );
@@ -293,9 +293,9 @@ class _ListingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -318,9 +318,9 @@ class _ListingCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(listing.title,
-                        style: const TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w600)),
+                        style: TextStyle(color: AppColors.txt(context), fontSize: 16, fontWeight: FontWeight.w600)),
                     Text(listing.userName,
-                        style: const TextStyle(color: AppColors.textHint, fontSize: 12)),
+                        style: TextStyle(color: AppColors.txtHint(context), fontSize: 12)),
                   ],
                 ),
               ),
@@ -340,22 +340,22 @@ class _ListingCard extends StatelessWidget {
           if (listing.description.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(listing.description,
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.4),
+                style: TextStyle(color: AppColors.txtSec(context), fontSize: 14, height: 1.4),
                 maxLines: 3, overflow: TextOverflow.ellipsis),
           ],
           const SizedBox(height: 12),
           Row(
             children: [
               if (listing.contactInfo.isNotEmpty) ...[
-                const Icon(Icons.phone, size: 14, color: AppColors.textHint),
+                Icon(Icons.phone, size: 14, color: AppColors.txtHint(context)),
                 const SizedBox(width: 6),
                 Text(listing.contactInfo,
-                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                    style: TextStyle(color: AppColors.txtSec(context), fontSize: 13)),
                 const Spacer(),
               ],
               if (listing.createdAt != null)
                 Text(timeago.format(listing.createdAt!, locale: 'tr'),
-                    style: const TextStyle(color: AppColors.textHint, fontSize: 12)),
+                    style: TextStyle(color: AppColors.txtHint(context), fontSize: 12)),
             ],
           ),
         ],

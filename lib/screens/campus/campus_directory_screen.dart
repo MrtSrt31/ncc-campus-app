@@ -40,14 +40,14 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(
         title: Text(l.campusDirectory),
         actions: [
           IconButton(
             icon: Icon(
               _showOnlyOpen ? Icons.toggle_on : Icons.toggle_off_outlined,
-              color: _showOnlyOpen ? AppColors.success : AppColors.textHint,
+              color: _showOnlyOpen ? AppColors.success : AppColors.txtHint(context),
               size: 32,
             ),
             tooltip: l.onlyOpenOnes,
@@ -62,12 +62,12 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
             child: TextField(
               onChanged: (v) => setState(() => _searchQuery = v),
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: AppColors.txt(context)),
               decoration: InputDecoration(
                 hintText: l.searchBusiness,
-                prefixIcon: const Icon(Icons.search, color: AppColors.textHint),
+                prefixIcon: Icon(Icons.search, color: AppColors.txtHint(context)),
                 filled: true,
-                fillColor: AppColors.surface,
+                fillColor: AppColors.surf(context),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
                   borderSide: BorderSide.none,
@@ -86,15 +86,15 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
                 final cat = SampleData.categories[index];
                 final isSelected = cat == _selectedCategory;
                 return Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: EdgeInsets.only(right: 8),
                   child: FilterChip(
                     selected: isSelected,
                     label: Text(_localizedCategory(cat, l)),
                     labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : AppColors.textSecondary,
+                      color: isSelected ? Colors.white : AppColors.txtSec(context),
                       fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
-                    backgroundColor: AppColors.surface,
+                    backgroundColor: AppColors.surf(context),
                     selectedColor: AppColors.primary,
                     checkmarkColor: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -120,7 +120,7 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
                   return Center(
                     child: Text(
                       l.noBusinessFound,
-                      style: const TextStyle(color: AppColors.textSecondary),
+                      style: TextStyle(color: AppColors.txtSec(context)),
                     ),
                   );
                 }
@@ -152,9 +152,9 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 14),
-        padding: const EdgeInsets.all(18),
+        padding: EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: AppColors.card,
+          color: AppColors.cardBg(context),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -182,8 +182,8 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
                       Expanded(
                         child: Text(
                           (!l.isTr && business.nameEn.isNotEmpty) ? business.nameEn : business.name,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
+                          style: TextStyle(
+                            color: AppColors.txt(context),
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -213,21 +213,21 @@ class _CampusDirectoryScreenState extends State<CampusDirectoryScreen> {
                     children: [
                       Text(
                         _localizedCategory(business.category, l),
-                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                        style: TextStyle(color: AppColors.txtSec(context), fontSize: 13),
                       ),
                       const SizedBox(width: 12),
                       const Icon(Icons.star, color: AppColors.warning, size: 14),
                       const SizedBox(width: 4),
                       Text(
                         '${business.rating} (${business.reviewCount})',
-                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                        style: TextStyle(color: AppColors.txtSec(context), fontSize: 13),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.textHint),
+            Icon(Icons.chevron_right, color: AppColors.txtHint(context)),
           ],
         ),
       ),

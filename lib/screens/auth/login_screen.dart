@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
@@ -67,19 +67,19 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                const Text(
+                Text(
                   'Giriş Yap',
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: AppColors.txt(context),
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'Hesabına giriş yap ve kampüsü keşfet',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: AppColors.txtSec(context),
                     fontSize: 15,
                   ),
                 ),
@@ -87,10 +87,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(color: AppColors.textPrimary),
-                  decoration: const InputDecoration(
+                  style: TextStyle(color: AppColors.txt(context)),
+                  decoration: InputDecoration(
                     hintText: 'E-posta',
-                    prefixIcon: Icon(Icons.email_outlined, color: AppColors.textHint),
+                    prefixIcon: Icon(Icons.email_outlined, color: AppColors.txtHint(context)),
                   ),
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'E-posta gerekli';
@@ -102,14 +102,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(
                     hintText: 'Şifre',
-                    prefixIcon: const Icon(Icons.lock_outline, color: AppColors.textHint),
+                    prefixIcon: Icon(Icons.lock_outline, color: AppColors.txtHint(context)),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                        color: AppColors.textHint,
+                        color: AppColors.txtHint(context),
                       ),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                     ),
@@ -144,10 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       Navigator.pushReplacementNamed(context, '/register');
                     },
-                    child: const Text.rich(
+                    child: Text.rich(
                       TextSpan(
                         text: 'Hesabın yok mu? ',
-                        style: TextStyle(color: AppColors.textSecondary),
+                        style: TextStyle(color: AppColors.txtSec(context)),
                         children: [
                           TextSpan(
                             text: 'Üye Ol',

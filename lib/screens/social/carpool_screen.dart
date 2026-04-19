@@ -41,7 +41,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surf(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -55,14 +55,14 @@ class _CarpoolScreenState extends State<CarpoolScreen> {
               children: [
                 Center(
                   child: Container(width: 40, height: 4,
-                    decoration: BoxDecoration(color: AppColors.surfaceLight, borderRadius: BorderRadius.circular(2))),
+                    decoration: BoxDecoration(color: AppColors.surfLight(context), borderRadius: BorderRadius.circular(2))),
                 ),
                 const SizedBox(height: 20),
-                Text(l.addRide, style: const TextStyle(color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.w700)),
+                Text(l.addRide, style: TextStyle(color: AppColors.txt(context), fontSize: 22, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 20),
                 TextField(
                   controller: fromC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(
                     hintText: l.from,
                     prefixIcon: const Icon(Icons.my_location, color: AppColors.primary),
@@ -71,7 +71,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> {
                 const SizedBox(height: 12),
                 TextField(
                   controller: toC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(
                     hintText: l.to,
                     prefixIcon: const Icon(Icons.location_on, color: AppColors.error),
@@ -92,18 +92,18 @@ class _CarpoolScreenState extends State<CarpoolScreen> {
                           if (date != null) setModalState(() => selectedDate = date);
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(16),
+                          padding: EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: AppColors.surface,
+                            color: AppColors.surf(context),
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: AppColors.surfaceLight),
+                            border: Border.all(color: AppColors.surfLight(context)),
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.calendar_today, size: 18, color: AppColors.textSecondary),
+                              Icon(Icons.calendar_today, size: 18, color: AppColors.txtSec(context)),
                               const SizedBox(width: 8),
                               Text(DateFormat('dd.MM.yyyy').format(selectedDate),
-                                  style: const TextStyle(color: AppColors.textPrimary)),
+                                  style: TextStyle(color: AppColors.txt(context))),
                             ],
                           ),
                         ),
@@ -120,18 +120,18 @@ class _CarpoolScreenState extends State<CarpoolScreen> {
                           if (time != null) setModalState(() => selectedTime = time);
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(16),
+                          padding: EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: AppColors.surface,
+                            color: AppColors.surf(context),
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: AppColors.surfaceLight),
+                            border: Border.all(color: AppColors.surfLight(context)),
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.access_time, size: 18, color: AppColors.textSecondary),
+                              Icon(Icons.access_time, size: 18, color: AppColors.txtSec(context)),
                               const SizedBox(width: 8),
                               Text(selectedTime.format(context),
-                                  style: const TextStyle(color: AppColors.textPrimary)),
+                                  style: TextStyle(color: AppColors.txt(context))),
                             ],
                           ),
                         ),
@@ -142,14 +142,14 @@ class _CarpoolScreenState extends State<CarpoolScreen> {
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    Text('${l.seats}: ', style: const TextStyle(color: AppColors.textSecondary)),
+                    Text('${l.seats}: ', style: TextStyle(color: AppColors.txtSec(context))),
                     IconButton(
                       onPressed: () {
                         if (seats > 1) setModalState(() => seats--);
                       },
-                      icon: const Icon(Icons.remove_circle_outline, color: AppColors.textSecondary),
+                      icon: Icon(Icons.remove_circle_outline, color: AppColors.txtSec(context)),
                     ),
-                    Text('$seats', style: const TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.w700)),
+                    Text('$seats', style: TextStyle(color: AppColors.txt(context), fontSize: 20, fontWeight: FontWeight.w700)),
                     IconButton(
                       onPressed: () {
                         if (seats < 7) setModalState(() => seats++);
@@ -161,13 +161,13 @@ class _CarpoolScreenState extends State<CarpoolScreen> {
                 const SizedBox(height: 12),
                 TextField(
                   controller: contactC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(hintText: l.contact),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: noteC,
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.txt(context)),
                   decoration: InputDecoration(hintText: l.note),
                 ),
                 const SizedBox(height: 20),
@@ -233,7 +233,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bg(context),
       appBar: AppBar(title: Text(l.carpoolTitle)),
       body: Column(
         children: [
@@ -289,11 +289,11 @@ class _CarpoolScreenState extends State<CarpoolScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.directions_car_outlined, size: 64, color: AppColors.textHint.withValues(alpha: 0.5)),
+          Icon(Icons.directions_car_outlined, size: 64, color: AppColors.txtHint(context).withValues(alpha: 0.5)),
           const SizedBox(height: 16),
-          Text(l.noRides, style: const TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+          Text(l.noRides, style: TextStyle(color: AppColors.txtSec(context), fontSize: 16)),
           const SizedBox(height: 8),
-          Text(l.rideHint, style: const TextStyle(color: AppColors.textHint, fontSize: 14)),
+          Text(l.rideHint, style: TextStyle(color: AppColors.txtHint(context), fontSize: 14)),
         ],
       ),
     );
@@ -314,9 +314,9 @@ class _RideCard extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -339,9 +339,9 @@ class _RideCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(ride.userName,
-                        style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
+                        style: TextStyle(color: AppColors.txt(context), fontWeight: FontWeight.w600)),
                     Text('$dateStr  •  $timeStr',
-                        style: const TextStyle(color: AppColors.textHint, fontSize: 12)),
+                        style: TextStyle(color: AppColors.txtHint(context), fontSize: 12)),
                   ],
                 ),
               ),
@@ -370,7 +370,7 @@ class _RideCard extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(ride.fromLocation,
-                    style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
+                    style: TextStyle(color: AppColors.txt(context), fontSize: 14)),
               ),
             ],
           ),
@@ -379,8 +379,8 @@ class _RideCard extends StatelessWidget {
             child: Column(
               children: List.generate(3, (_) => Container(
                 width: 2, height: 4,
-                margin: const EdgeInsets.symmetric(vertical: 2),
-                color: AppColors.textHint,
+                margin: EdgeInsets.symmetric(vertical: 2),
+                color: AppColors.txtHint(context),
               )),
             ),
           ),
@@ -390,23 +390,23 @@ class _RideCard extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(ride.toLocation,
-                    style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
+                    style: TextStyle(color: AppColors.txt(context), fontSize: 14)),
               ),
             ],
           ),
           if (ride.note.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(ride.note,
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                style: TextStyle(color: AppColors.txtSec(context), fontSize: 13)),
           ],
           const SizedBox(height: 14),
           Row(
             children: [
               if (ride.contactInfo.isNotEmpty) ...[
-                const Icon(Icons.phone, size: 14, color: AppColors.textHint),
+                Icon(Icons.phone, size: 14, color: AppColors.txtHint(context)),
                 const SizedBox(width: 6),
                 Text(ride.contactInfo,
-                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                    style: TextStyle(color: AppColors.txtSec(context), fontSize: 13)),
               ],
               const Spacer(),
               if (!ride.isFull)
